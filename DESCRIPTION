@@ -1,6 +1,6 @@
-Package: tableone
+Package: huxtableone
 Title: Descriptive Tables for Observational or Interventional Studies
-Version: 0.4.3
+Version: 0.4.4
 Authors@R: 
     person(given = "Robert",
            family = "Challen",
@@ -15,7 +15,7 @@ Description:
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2.9003
 Suggests: 
     covr,
     formatR,
@@ -52,7 +52,7 @@ Imports:
     purrr,
     tidyselect (>= 1.2.0),
     pwr
-URL: https://bristol-vaccine-centre.github.io/tableone/,
-    https://github.com/bristol-vaccine-centre/tableone,
-    https://doi.org/10.5281/zenodo.7226522
-BugReports: https://github.com/bristol-vaccine-centre/tableone/issues
+URL: https://ai4ci.github.io/huxtableone/,
+    https://github.com/ai4ci/huxtableone,
+    https://doi.org/10.5281/zenodo.14794616
+BugReports: https://github.com/ai4ci/huxtableone/issues

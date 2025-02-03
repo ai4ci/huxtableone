@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">i_am</span>(<span class="st">&quot;tests/table-format.Rmd&quot;</span>)</span></code></pre></div>
-<pre><code>## here() starts at /home/vp22681/Dropbox/Git/tableone</code></pre>
+<pre><code>## here() starts at /home/vp22681/Dropbox/Git/huxtableone</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;vignettes/vignette-utils.R&quot;</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
@@ -364,7 +364,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">cell</td></tr>
 </table>
 
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;```R</span><span class="sc">\n</span><span class="st">&quot;</span>,<span class="fu">paste0</span>(<span class="fu">.f</span>(tableone<span class="sc">::</span>default.format<span class="sc">$</span>relaxed),<span class="at">collapse=</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>),<span class="st">&quot;</span><span class="sc">\n</span><span class="st">```&quot;</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">asis_output</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;```R</span><span class="sc">\n</span><span class="st">&quot;</span>,<span class="fu">paste0</span>(<span class="fu">.f</span>(huxtableone<span class="sc">::</span>default.format<span class="sc">$</span>relaxed),<span class="at">collapse=</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>),<span class="st">&quot;</span><span class="sc">\n</span><span class="st">```&quot;</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">asis_output</span>()</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtype_count =</span> <span class="fu">list</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">characteristic =</span> <span class="st">&quot;{level} % [95% CI]&quot;</span>,</span>

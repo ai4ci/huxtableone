@@ -1,4 +1,4 @@
-url: https://bristol-vaccine-centre.github.io/tableone/
+url: https://ai4ci.github.io/huxtableone/
 template:
   bootstrap: 5
 destination: docs
@@ -40,6 +40,7 @@ reference:
   - set_labels
   - extract_units
   - set_units
+  - as_vars
 - title: "Configuration"
   contents:
   - default.format

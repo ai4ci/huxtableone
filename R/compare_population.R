@@ -20,7 +20,7 @@
 #' iris %>% dplyr::group_by(Species) %>% compare_population(tidyselect::everything())
 #'
 #' # Missing data
-#' old = options("tableone.show_pvalue_method"=FALSE)
+#' old = options("huxtableone.show_pvalue_method"=FALSE)
 #' missing_diamonds %>%
 #'   dplyr::group_by(is_colored) %>%
 #'   compare_population(-color, layout="relaxed")
@@ -44,8 +44,8 @@ compare_population = function(
     override_percent_dp = list(),
     override_real_dp = list(),
     p_format = names(.pvalue.defaults),
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     footer_text = NULL,
     show_binary_value = NULL,
     raw_output = FALSE
@@ -100,8 +100,8 @@ compare_outcomes = function(df,
                             override_percent_dp = list(),
                             override_real_dp = list(),
                             p_format = names(.pvalue.defaults),
-                            font_size = getOption("tableone.font_size",8),
-                            font = getOption("tableone.font","Arial"),
+                            font_size = getOption("huxtableone.font_size",8),
+                            font = getOption("huxtableone.font","Arial"),
                             footer_text = NULL,
                             show_binary_value = NULL,
                             raw_output = FALSE
@@ -167,7 +167,7 @@ compare_outcomes = function(df,
 #'   would be some form of [dplyr::case_when] lookup, or a string function such
 #'   as [stringr::str_to_sentence]. (N.b. this function must be vectorised).
 #'   Any value provided here will be overridden by the
-#'   `options("tableone.labeller" = my_label_fn)` which allows global setting of
+#'   `options("huxtableone.labeller" = my_label_fn)` which allows global setting of
 #'   the labeller.
 #' @param units (optional) a named list of units, following a `c(<colname_1> =
 #'   "<unit_1>", <colname_2> = "<unit_2>", ...)` format. columns not present in
@@ -177,14 +177,14 @@ compare_outcomes = function(df,
 #'   default type for a column in a data set are calculated using heurisitics
 #'   depending on the nature of the data (categorical or continuous), and result
 #'   of normality tests. if you want to override this the options are
-#'   `r paste0("\"", names(tableone:::.summary_types), "\"", collapse= ",")` and you
+#'   `r paste0("\"", names(huxtableone:::.summary_types), "\"", collapse= ",")` and you
 #'   specify this on a column by column bases with a named list (e.g
 #'   `c("Petal.Width"="mean_sd")`). Overriding the default does not check the
 #'   type of data is correct for the summary type and will potentially cause
 #'   errors if this is not done correctly.
 #' @param override_method if you want to override the comparison method for a
 #'   particular variable the options are
-#'   `r paste0("\"", names(tableone:::.comparison.fns), "\"", collapse= ",")` and you
+#'   `r paste0("\"", names(huxtableone:::.comparison.fns), "\"", collapse= ",")` and you
 #'   specify this on a column by column bases with a named list (e.g
 #'   `c("Petal.Width"="t-test")`)
 #'
@@ -219,8 +219,8 @@ as_t1_signif = function(
   }
   label_fn = purrr::as_mapper(label_fn)
 
-  if (df %>% dplyr::n_groups() > getOption("tableone.max_comparisons",10)) {
-    stop("The number of groups being compared is ",df %>% dplyr::n_groups()," which is more than the maximum allowed by `options('tableone.max_comparisons'=...)`, which is currently ",getOption("tableone.max_comparisons",10))
+  if (df %>% dplyr::n_groups() > getOption("huxtableone.max_comparisons",10)) {
+    stop("The number of groups being compared is ",df %>% dplyr::n_groups()," which is more than the maximum allowed by `options('huxtableone.max_comparisons'=...)`, which is currently ",getOption("huxtableone.max_comparisons",10))
   }
 
   shape = .get_shape(df,cols,label_fn,units)
@@ -237,9 +237,9 @@ as_t1_signif = function(
 #' @param x the `t1_signif` result as calculated by `compare_population(...)`
 #' @param ... not used
 #' @param layout (optional) various layouts are defined as default. As of this
-#'   version of `tableone` they are
-#'   `r paste0("\"",names(tableone::default.format), "\"", collapse= ",")`. The layouts can be
-#'   customised using the options `options("tableone.format_list"=list(...)")`,
+#'   version of `huxtableone` they are
+#'   `r paste0("\"",names(huxtableone::default.format), "\"", collapse= ",")`. The layouts can be
+#'   customised using the options `options("huxtableone.format_list"=list(...)")`,
 #'   and this is described in more detail in the vignettes.
 #' @param override_percent_dp (optional) a named list of overrides for the default
 #'   precision of formatting percentages, following a `c(<colname_1> = 2,
@@ -249,16 +249,16 @@ as_t1_signif = function(
 #'   precision of formatting real values, following a `c(<colname_1> = 2,
 #'   <colname_2> = 4, ...)` format. columns not present in this list
 #'   will use the defaults defined in the layout. See the
-#'   \code{utils::vignette("customisation", package="tableone")}.
+#'   \code{utils::vignette("customisation", package="huxtableone")}.
 #' @param p_format the format of the p-values: one of
 #'  `r paste0("\"",names(.pvalue.defaults),"\"",collapse=", ")` but any value
-#'  here is overridden by the `option("tableone.pvalue_formatter"=function(...))`
+#'  here is overridden by the `option("huxtableone.pvalue_formatter"=function(...))`
 #' @param font_size (optional) the font size for the table in points
 #' @param font (optional) the font family for the table (which will be matched to
 #'   closest on your system)
 #' @param footer_text any text that needs to be added at the end of the table,
 #'   setting this to FALSE dsables the whole footer (as does
-#'   `options("tableone.hide_footer"=TRUE)`).
+#'   `options("huxtableone.hide_footer"=TRUE)`).
 #' @param show_binary_value if set this will filter the display of covariates where the number of possibilities
 #'   is exactly 2 to this value.
 #'
@@ -267,7 +267,7 @@ as_t1_signif = function(
 #' @return a formatted table as a `huxtable`
 #' @export
 #' @examples
-#' library(tableone)
+#' library(huxtableone)
 #' tmp = iris %>% dplyr::group_by(Species) %>%
 #'   as_t1_signif(tidyselect::everything()) %>%
 #'   huxtable::as_huxtable()
@@ -277,8 +277,8 @@ as_huxtable.t1_signif = function(
     override_percent_dp = list(),
     override_real_dp = list(),
     p_format = names(.pvalue.defaults),
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     footer_text = NULL,
     show_binary_value = NULL
 ) {
@@ -286,15 +286,15 @@ as_huxtable.t1_signif = function(
   if (is.list(layout)) {
     format = layout
   } else {
-    format = getOption("tableone.format_list", default.format[[layout]])
+    format = getOption("huxtableone.format_list", default.format[[layout]])
   }
   fmt = .format_summary(x, format=format, override_percent_dp = override_percent_dp, override_real_dp=override_real_dp, show_binary_value=show_binary_value)
 
   intervention = attr(x, "intervention")
 
-  p_col = as.symbol(getOption("tableone.pvalue_column_name","P value"))
-  variable_col = as.symbol(getOption("tableone.variable_column_name","Variable"))
-  characteristic_col = as.symbol(getOption("tableone.characteristic_column_name","Characteristic"))
+  p_col = as.symbol(getOption("huxtableone.pvalue_column_name","P value"))
+  variable_col = as.symbol(getOption("huxtableone.variable_column_name","Variable"))
+  characteristic_col = as.symbol(getOption("huxtableone.characteristic_column_name","Characteristic"))
 
 
   fsign = x %>% .format_significance(p_format)
@@ -319,7 +319,7 @@ as_huxtable.t1_signif = function(
   norm = NULL
   if (any(x$.type == "continuous")) norm = .describe_normality_test()
 
-  method = getOption("tableone.show_pvalue_method",TRUE)
+  method = getOption("huxtableone.show_pvalue_method",TRUE)
   if (method) {
     footer = c(
       sprintf("%s", tmp$table_key),
@@ -334,7 +334,7 @@ as_huxtable.t1_signif = function(
     )
   }
 
-  signif_lvl = getOption("tableone.bonferroni_level",0.05)
+  signif_lvl = getOption("huxtableone.bonferroni_level",0.05)
   if (!isFALSE(signif_lvl)) {
     footer = c(footer,
                sprintf("An adjusted %s of %1.3g may be considered significant.",
@@ -343,7 +343,7 @@ as_huxtable.t1_signif = function(
     )
   }
 
-  if (!getOption("tableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
     hux = hux %>%
       huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
       huxtable::set_bottom_border(row=huxtable::final(),value=0)
@@ -358,7 +358,7 @@ as_huxtable.t1_signif = function(
 #' Extract one or more comparisons for inserting into text.
 #'
 #' At some point we need to take information from the tables produced by
-#' `tableone` and place it into the main text of the document. It is annoying
+#' `huxtableone` and place it into the main text of the document. It is annoying
 #' if this cannot be done automatically. the `group_comparison()` function enables
 #' extraction of one or more head to head comparisons and provides a fairly
 #' flexible mechanism for building the precise format desired.
@@ -514,7 +514,7 @@ group_comparison = function(
     dplyr::select(!!!intervention_col) %>% dplyr::distinct() %>% nrow() <= 1)
 
   if (!no_signif) {
-    fun = getOption("tableone.pvalue_formatter",.pvalue.defaults[[p_format]])
+    fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
     signifdf = tmp %>% dplyr::select(
       variable = .label, .significance_test
     ) %>%
@@ -597,11 +597,11 @@ group_comparison = function(
 
 # df_signif = df_shape %>% .significance_tests()
 # df_signif %>% .format_significance()
-.format_significance = function(df_signif, p_format = names(.pvalue.defaults), method = getOption("tableone.show_pvalue_method",TRUE)) {
+.format_significance = function(df_signif, p_format = names(.pvalue.defaults), method = getOption("huxtableone.show_pvalue_method",TRUE)) {
   p_format = match.arg(p_format)
-  p_col = as.symbol(getOption("tableone.pvalue_column_name","P value"))
+  p_col = as.symbol(getOption("huxtableone.pvalue_column_name","P value"))
 
-  fun = getOption("tableone.pvalue_formatter",.pvalue.defaults[[p_format]])
+  fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
 
   tmp = df_signif %>% dplyr::select(variable = .label, .type, .significance_test) %>%
     tidyr::unnest(.significance_test)

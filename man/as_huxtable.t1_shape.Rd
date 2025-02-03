@@ -7,8 +7,8 @@
 \method{as_huxtable}{t1_shape}(
   x,
   ...,
-  font_size = getOption("tableone.font_size", 8),
-  font = getOption("tableone.font", "Arial"),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = getOption("huxtableone.font", "Arial"),
   footer_text = NULL,
   show_binary_value = NULL
 )
@@ -25,7 +25,7 @@ closest on your system)}
 
 \item{footer_text}{any text that needs to be added at the end of the table,
 setting this to FALSE dsables the whole footer (as does
-\code{options("tableone.hide_footer"=TRUE)}).}
+\code{options("huxtableone.hide_footer"=TRUE)}).}
 
 \item{show_binary_value}{if set this will filter the display of covariates where the number of possibilities
 is exactly 2 to this value.}

@@ -20,7 +20,7 @@
 #'   then all numerics are converted in the same way (this is the default). If
 #'   there are some values that you are not certain you want to convert setting
 #'   a limit on the maximum number of levels in a generated factor may be a good
-#'   idea (i.e. `options("tableone.max_discrete_levels"=16)`) otherwise all
+#'   idea (i.e. `options("huxtableone.max_discrete_levels"=16)`) otherwise all
 #'   values are converted
 #' @param .character in general character columns are converted into a factor with
 #'   the default levels. To explicitly set levels a named list can be given here
@@ -52,7 +52,7 @@
 #' # in this example picks up the `depth` and `table` columns as exceeding this
 #' # new limit:
 #'
-#' old = options("tableone.max_discrete_levels"=16)
+#' old = options("huxtableone.max_discrete_levels"=16)
 #' diamonds %>% dplyr::mutate(is_colored = color > "F") %>%
 #'   make_factors(tidyselect::everything(), .numeric="{toupper(name)}={round(value)}") %>%
 #'   dplyr::glimpse()
@@ -75,7 +75,7 @@
 make_factors = function(df, ..., .logical = c("yes","no"), .numeric = "{name}={value}", .character = NULL) {
 
   # In this context we generally know we want to convert everything
-  max_levels = getOption("tableone.max_discrete_levels",Inf)
+  max_levels = getOption("huxtableone.max_discrete_levels",Inf)
   cols = .parse_vars(df, ...)
   if(is.null(names(.numeric))) {
     if (length(.numeric) > 1) {
@@ -144,7 +144,7 @@ make_factors = function(df, ..., .logical = c("yes","no"), .numeric = "{name}={v
 #'
 #' @param x a vector of integer valued numbers, e.g. ages, counts
 #' @param cut_points a vector of integer valued cut points which define the lower, inclusive boundary of each group
-#' @param glue a glue spec that may be used to generate a label. It can use {low}, {high}, {next_low}, or {label} as values.
+#' @param glue a glue spec that may be used to generate a label. It can use `{low}`, `{high}`, `{next_low}`, or `{label}` as values.
 #' @param lower_limit the minimum value we should include (this is inclusive for the bottom category) (default -Inf)
 #' @param upper_limit the maximum value we should include (this is also inclusive for the top category) (default Inf)
 #' @param ... not used

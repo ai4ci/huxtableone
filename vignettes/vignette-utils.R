@@ -1,6 +1,6 @@
 
 # pretty print R list
-# .f(tableone::default.format$relaxed)
+# .f(huxtableone::default.format$relaxed)
 .f <- function(x) {
   text_con <- textConnection("output", "w")
   dput(x, text_con)

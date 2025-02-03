@@ -1,31 +1,98 @@
-## Huxtable utils ----
-# when used outside of 'ggrrr' the project must import
-# systemfonts, huxtable, dplyr, tidyr, utils
+# ---
+# repo: terminological/ggrrr
+# file: standalone-huxtable-utils.R
+# last-updated: 2024-06-06
+# license: https://unlicense.org
+# imports:
+#    - dplyr
+#    - huxtable
+#    - knitr
+#    - rlang
+#    - systemfonts
+#    - tibble
+#    - tidyr
+#    - tidyselect
+#    - utils
+# ---
 
-# .check_font("Helvetica")
-.check_font = function(family) {
-  f = tryCatch(get("check_font", mode="function", envir = rlang::env_parent()), error = function(e) NULL)
-  if (!is.null(f)) return(f(family))
-  path = NULL
-  match = systemfonts::match_font(family)
-  family2 = systemfonts::system_fonts() %>% dplyr::filter(path == match$path) %>% dplyr::pull(family) %>% unique()
-  if(length(family2) == 0) stop("No suitable font substitute for: ",family)
-  return(family2[[1]])
+
+# Formatting ----
+
+#' Pick a locally installed font family that matches requested
+#'
+#' @param family the font family requested
+#'
+#' @return a mapping as a named list of font families that are present on the
+#'   system (names are the requested font family)
+#' @keywords internal
+#' @concept huxtable
+#'
+#' @examples
+#' try({
+#' .hux_substitute_fonts(c("Roboto","Arial","Kings","Unmatched"))
+#' })
+.hux_substitute_fonts = function(family) {
+  weight = path = NULL
+
+  sys_fonts_list = dplyr::bind_rows(
+    systemfonts::registry_fonts() %>% dplyr::mutate(weight = as.character(weight)),
+    systemfonts::system_fonts() %>% dplyr::mutate(weight = as.character(weight))
+  ) %>% dplyr::select(
+    path, sub=family
+  ) %>% dplyr::distinct()
+
+  tmp = tibble::tibble(
+    family = family,
+    path = systemfonts::match_fonts(family)$path
+  ) %>% dplyr::inner_join(
+    sys_fonts_list, by="path"
+  ) %>%
+    dplyr::select(family, sub) %>%
+    dplyr::distinct()
+
+  if (any(tmp$family != tmp$sub)) {
+    missing = tmp %>% dplyr::filter(family != sub) %>% dplyr::pull(family) %>% paste0(collapse = ", ")
+    rlang::warn(
+      sprintf("The requested font(s): [%s], are not present on the system. Alternatives will be used.", missing),
+      .frequency = "once",
+      .frequency_id = missing
+    )
+  }
+  names(tmp$sub) = tmp$family
+  return(tmp$sub)
 }
 
-# Fonts and colours from plot ----
 
 #' @noRd
 #' @examples
-#' .hux_used_fonts(iris %>% hux_default_layout(defaultFont="Roboto"))
+#' try({
+#' .hux_used_fonts(iris %>% .hux_default_layout(defaultFont="Roboto"))
+#' })
 .hux_used_fonts = function(hux) {
   tmp2 = attributes(hux)
   return(unique(as.vector(tmp2$font)))
 }
 
-# A tidy article theme for huxtables
+
+
+#' A tidy article theme for huxtables
+#'
+#' The main aim is to get something that works with google docs when you copy and paste.
+#'
+#' @param hux a huxtable object
+#' @param defaultFontSize default size of font in points (8)
+#' @param defaultFont the font family name
+#' @param headerRows the number of rows that are headers
+#' @return the formatted huxtable.
+#' @keywords internal
+#' @concept huxtable
+#'
+#' @examples
+#' try({
+#' hux = iris %>% .hux_default_layout()
+#' })
 .hux_default_layout = function(hux, defaultFontSize=8, defaultFont = "Roboto", headerRows = 1) {
-  defaultFont = .check_font(defaultFont)
+  defaultFont = .hux_substitute_fonts(defaultFont)
   if(!huxtable::is_hux(hux)) hux = huxtable::as_hux(hux)
   return( hux %>%
             huxtable::set_font_size(huxtable::everywhere,huxtable::everywhere, value = defaultFontSize) %>%
@@ -43,24 +110,101 @@
   )
 }
 
-# Set the font family and size in a huxtable globally
+# Composing, headers and footers ----
+
+#' Set the font family and size in a huxtable globally
+#'
+#' @param hux a huxtable table
+#' @param defaultFontSize the desired font size
+#' @param defaultFont the desired font
+#' @keywords internal
+#' @concept huxtable
+#'
+#' @return the altered huxtable
 .hux_set_font = function(hux, defaultFontSize=8, defaultFont = "Roboto") {
-  defaultFont = .check_font(defaultFont)
+  defaultFont = .hux_substitute_fonts(defaultFont)
   hux %>%
     huxtable::set_font_size(huxtable::everywhere,huxtable::everywhere,defaultFontSize) %>%
     huxtable::set_font(huxtable::everywhere,huxtable::everywhere,defaultFont)
 }
 
-.hux_add_footer = function(hux, footer) {
-  if (!is.null(footer) & length(footer) > 0) {
-    hux = hux %>%
-      huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
-      huxtable::set_bottom_border(row=huxtable::final(),value=0)
-  }
-  return(hux)
+#' Add a footer row as a final row in a huxtable
+#'
+#' Keeps the same formatting as the rest of the table except
+#' for borders
+#'
+#' @param hux a huxtable
+#' @param footer footer text
+#'
+#' @return a huxtable with last row footer
+#' @keywords internal
+#' @concept huxtable
+.hux_set_footer = function(hux, footer) {
+  footer = paste0(footer,collapse="\n")
+  hux %>% huxtable::insert_row(
+    footer,
+    after=nrow(hux), colspan = ncol(hux), fill="",copy_cell_props = TRUE) %>%
+    huxtable::set_bottom_border(huxtable::final(1), huxtable::everywhere, 0) %>%
+    huxtable::set_wrap(huxtable::final(1), huxtable::everywhere, TRUE)
 }
 
-## symbol conversion ----
+#' Set a huxtable caption as a first row
+#'
+#' Keeps the same formatting as the rest of the table
+#'
+#' @param hux a huxtable
+#' @param caption caption text
+#'
+#' @return a huxtable with first row caption
+#' @keywords internal
+#' @concept huxtable
+.hux_set_caption = function(hux, caption) {
+  caption = paste0(caption,collapse="\n")
+  hux %>% .hux_insert_start(caption, colspan = ncol(hux)) %>%
+    huxtable::set_top_border(1, huxtable::everywhere, 0) %>%
+    huxtable::set_wrap(1, huxtable::everywhere, TRUE)
+}
+
+#' Insert row at start maintaining format
+#'
+#' @param hux a huxtable
+#' @param ... stuff to insert into cells
+#' @param fill padding for empty cells.
+#' @param colspan how far to span first inserted cell?
+#'
+#' @return a huxtable with row inserted at start in the same format
+#' @keywords internal
+#' @concept huxtable
+.hux_insert_start = function(hux, ..., fill="", colspan = 1) {
+  hux = hux %>% huxtable::insert_row(
+    ...,
+    after=1, fill=fill, copy_cell_props = TRUE)
+  tmp = hux[2,]
+  hux[2,] = hux[1,]
+  hux[1,] = tmp
+  hux %>% huxtable::set_colspan(1, 1, colspan)
+}
+
+#' Bind rows for huxtables
+#'
+#' Sometimes vanilla bind_rows gets confused.
+#'
+#' @param ... a list of huxtables
+#'
+#' @return a single huxtable
+#' @keywords internal
+#' @concept huxtable
+.hux_bind_rows = function(...) {
+  dots = rlang::list2(...)
+  if (is.list(dots[[1]]) & length(dots)==1) dots = dots[[1]]
+  out = dots[[1]]
+  for (i in 2:length(dots)) {
+    out = out %>% huxtable::add_rows(dots[[i]], after = nrow(out))
+  }
+  return(out)
+}
+
+# Tidy huxtables ----
 .as_symbol_list = function(x,...) {
   UseMethod(".as_symbol_list",x)
 }
@@ -143,7 +287,38 @@
   return(FALSE)
 }
 
-# Convert a dataframe to a huxtable with nested rows and columns.
+#' Convert a dataframe to a huxtable with nested rows and columns.
+#'
+#' The assumption here is that the input data is a long format tidy dataframe
+#' with both rows and columns specified by values of the `rowGroupVars` and
+#' `colGroupVars` columns. The long format (sparse) table is translated into a
+#' nested tree of rows (using `rowGroupVars`) and a nested tree of columns (from
+#' `colGroupVars`). Individual data items are placed in the cell intersecting
+#' these two trees. If there are multiple matches an additional layer of grouping
+#' is added to the columns.
+#'
+#' @param tidyDf A dataframe with row groupings (as a set of columns) and column
+#'   groupings (as a set of columns) and data, where the data is in a tidy
+#'   format with a row per "cell" or cell group.
+#' @param rowGroupVars A dplyr::vars(...) column specification which will define how
+#'   rows are grouped
+#' @param colGroupVars A dplyr::vars(...) column specification with defines how columns
+#'   will be grouped
+#' @param missing If there is no content for a given rowGroup / colGroup
+#'   combination then this character will be used as a placeholder
+#' @param na If there are NA contents then this character will be used.
+#' @param displayRedundantColumnNames if there is one column per column group
+#'   the name of that column may be irrelevant (e.g. if there is a `col_name`,
+#'   `value` fully tidy format) and `col_name` is in the `colGroupVars` list
+#'   then the name of the column `value` is redundant and not displayed by
+#'   default. However sometimes you want to display this if you have named it as
+#'   something specific e.g. including the units. If there is more than one
+#'   column per `colGroup` the column titles are needed and kept.
+#' @param ... passed to `hux_default_layout()`
+#'
+#' @return a huxtable table
+#' @keywords internal
+#' @concept huxtable
 .hux_tidy = function(tidyDf, rowGroupVars, colGroupVars, missing="\u2014", na="\u2014", displayRedundantColumnNames = FALSE, ...) {
 
   if (length(colGroupVars) == 0) {
@@ -285,8 +460,20 @@
   return(fullHux)
 }
 
+# Nesting groups ----
 
-# Make a huxtable narrower
+#' Make a huxtable narrower
+#'
+#' Converts row spanning columns into column spanning header rows making
+#' a table narrower but longer. The column that is being moved is retained to
+#' allow for the appearance of indentation.
+#'
+#' @param t the huxtable
+#' @param col the column index you want to nest into the row above
+#'
+#' @return a narrower huxtable
+#' @keywords internal
+#' @concept huxtable
 .hux_nest_group = function(t, col=1) {
   # examine content rows
   rows = (1:nrow(t))[!t %>% huxtable::header_rows()]
@@ -315,17 +502,6 @@
 
 
 
-# # TODO: a knitr engine for a long format table
-# # Probably needs a longformat -> huxtable converter also.
-# .knitr_engine = function(options) {
-#   content = options$code
-#   # parse content into data frame
-#   #
-#   #
-#   out = "whatever output"
-#   # this is for text output... how to return a hux object and have it
-#   # rendered by knitr?
-#   knitr::engine_output(options, content, out)
-# }
-#
-# knitr::knit_engines$set(tidy_table = .knitr_engine)
+
+
+

@@ -35,7 +35,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{override_type}{(optional) a named list of data summary types. The
@@ -50,7 +50,7 @@ errors if this is not done correctly.}
 
 \item{p_format}{the format of the p-values: one of
 "sampl", "nejm", "jama", "lancet", "aim" but any value
-here is overridden by the \verb{option("tableone.pvalue_formatter"=function(...))}}
+here is overridden by the \verb{option("huxtableone.pvalue_formatter"=function(...))}}
 
 \item{override_method}{if you want to override the comparison method for a
 particular variable the options are

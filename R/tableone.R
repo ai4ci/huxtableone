@@ -1,16 +1,16 @@
 
 # disable messages with option
 .message = function(...) {
-  if (!getOption("tableone.quiet",FALSE)) message(...)
+  if (!getOption("huxtableone.quiet",FALSE)) message(...)
 }
 
 #' Get footer text if available
 #'
-#' The functions in `tableone` will record the methods used for reporting in a
+#' The functions in `huxtableone` will record the methods used for reporting in a
 #' scientific paper. This is both for normality assumption tests and for
 #' significance tests.
 #'
-#' @param df_output a data frame that is the output of a `tableone` function
+#' @param df_output a data frame that is the output of a `huxtableone` function
 #'
 #' @return the footnotes if they exist as a list (NULL otherwise)
 #' @export

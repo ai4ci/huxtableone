@@ -15,8 +15,8 @@ compare_population(
   override_percent_dp = list(),
   override_real_dp = list(),
   p_format = names(.pvalue.defaults),
-  font_size = getOption("tableone.font_size", 8),
-  font = getOption("tableone.font", "Arial"),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = getOption("huxtableone.font", "Arial"),
   footer_text = NULL,
   show_binary_value = NULL,
   raw_output = FALSE
@@ -44,7 +44,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{units}{(optional) a named list of units, following a \verb{c(<colname_1> = "<unit_1>", <colname_2> = "<unit_2>", ...)} format. columns not present in
@@ -68,9 +68,9 @@ specify this on a column by column bases with a named list (e.g
 \code{c("Petal.Width"="t-test")})}
 
 \item{layout}{(optional) various layouts are defined as default. As of this
-version of \code{tableone} they are
+version of \code{huxtableone} they are
 "relaxed","compact","micro","simple","single","missing". The layouts can be
-customised using the options \verb{options("tableone.format_list"=list(...)")},
+customised using the options \verb{options("huxtableone.format_list"=list(...)")},
 and this is described in more detail in the vignettes.}
 
 \item{override_percent_dp}{(optional) a named list of overrides for the default
@@ -80,11 +80,11 @@ will use the defaults defined in the layout. See the vignette on customisation.}
 \item{override_real_dp}{(optional) a named list of overrides for the default
 precision of formatting real values, following a \verb{c(<colname_1> = 2, <colname_2> = 4, ...)} format. columns not present in this list
 will use the defaults defined in the layout. See the
-\code{utils::vignette("customisation", package="tableone")}.}
+\code{utils::vignette("customisation", package="huxtableone")}.}
 
 \item{p_format}{the format of the p-values: one of
 "sampl", "nejm", "jama", "lancet", "aim" but any value
-here is overridden by the \verb{option("tableone.pvalue_formatter"=function(...))}}
+here is overridden by the \verb{option("huxtableone.pvalue_formatter"=function(...))}}
 
 \item{font_size}{(optional) the font size for the table in points}
 
@@ -93,7 +93,7 @@ closest on your system)}
 
 \item{footer_text}{any text that needs to be added at the end of the table,
 setting this to FALSE dsables the whole footer (as does
-\code{options("tableone.hide_footer"=TRUE)}).}
+\code{options("huxtableone.hide_footer"=TRUE)}).}
 
 \item{show_binary_value}{if set this will filter the display of covariates where the number of possibilities
 is exactly 2 to this value.}
@@ -117,7 +117,7 @@ of whether data is correlated to intervention.
 iris \%>\% dplyr::group_by(Species) \%>\% compare_population(tidyselect::everything())
 
 # Missing data
-old = options("tableone.show_pvalue_method"=FALSE)
+old = options("huxtableone.show_pvalue_method"=FALSE)
 missing_diamonds \%>\%
   dplyr::group_by(is_colored) \%>\%
   compare_population(-color, layout="relaxed")

@@ -7,13 +7,13 @@
 get_footer_text(df_output)
 }
 \arguments{
-\item{df_output}{a data frame that is the output of a \code{tableone} function}
+\item{df_output}{a data frame that is the output of a \code{huxtableone} function}
 }
 \value{
 the footnotes if they exist as a list (NULL otherwise)
 }
 \description{
-The functions in \code{tableone} will record the methods used for reporting in a
+The functions in \code{huxtableone} will record the methods used for reporting in a
 scientific paper. This is both for normality assumption tests and for
 significance tests.
 }

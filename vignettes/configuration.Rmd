@@ -1,8 +1,8 @@
 ---
-title: "tableone: Configuration"
+title: "huxtableone: Configuration"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{tableone: Configuration}
+  %\VignetteIndexEntry{huxtableone: Configuration}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,10 +18,10 @@ original_opts = options()
   options(original_opts)
 }
 
-options(tableone.quiet = TRUE)
+options(huxtableone.quiet = TRUE)
 
 library(tidyverse)
-library(tableone)
+library(huxtableone)
 library(survival)
 ```
 
@@ -67,7 +67,7 @@ rename_cols = function(col) {
 
 # set it using an option
 # we are not going to reset this as we will use in all the subsequent examples:
-options("tableone.labeller"=rename_cols)
+options("huxtableone.labeller"=rename_cols)
 
 gcd %>% compare_population(formula) 
 
@@ -84,15 +84,15 @@ gcd %>% compare_population(formula)
 ```{r}
 old = options(
   # set a mid point as decimal point
-  "tableone.dp"="\u00B7",
-  "tableone.font"="Arial Narrow",
-  "tableone.font_size"=12,
-  "tableone.pvalue_column_name"="p-value",
+  "huxtableone.dp"="\u00B7",
+  "huxtableone.font"="Arial Narrow",
+  "huxtableone.font_size"=12,
+  "huxtableone.pvalue_column_name"="p-value",
   # the p-value formatter must be a function that takes a vector of numbers and returns
   # a vector of characters. The example here is a function that returns a function.
-  "tableone.pvalue_formatter" = 
+  "huxtableone.pvalue_formatter" = 
           scales::label_pvalue(accuracy = 0.01,decimal.mark = "\u00B7"),
-  "tableone.show_pvalue_method"=FALSE
+  "huxtableone.show_pvalue_method"=FALSE
 )
 
 
@@ -120,8 +120,8 @@ significance levels are also configurable.
 # that the data is normally distributed), height and weight are found to be
 # and hence the t-test is used.
 old = options(
-  "tableone.normality_test"="lillie",
-  "tableone.normality_significance"=0.00001
+  "huxtableone.normality_test"="lillie",
+  "huxtableone.normality_significance"=0.00001
 )
 
 gcd %>% compare_population(
@@ -139,7 +139,7 @@ options(old)
 ```R
 # the following option also controls which parametric test is chosen (between)
 # wilcoxon and ks tests:
-# options("tableone.tolerance_to_ties"=0.25)
+# options("huxtableone.tolerance_to_ties"=0.25)
 ```
 
 
@@ -183,7 +183,7 @@ gcd %>% compare_population(
 The "relaxed" standard layout is defined using a list. This is shown below:
 
 ```{r echo=FALSE}
-paste0("```R\n",paste0(.f(tableone::default.format$relaxed),collapse="\n"),"\n```") %>% knitr::asis_output()
+paste0("```R\n",paste0(.f(huxtableone::default.format$relaxed),collapse="\n"),"\n```") %>% knitr::asis_output()
 ```
 
 We can produce a customised list based on this and supply it to a formatting
@@ -210,11 +210,11 @@ There are a few useful formatting functions that the spec can also use beyond
 the usual text processing functions:
 
 * `.sprintf_na` - `sprintf`s a set of numbers replacing the output with 
-  `getOption("tableone.na","\u2014")` if all values are missing, and if some
+  `getOption("huxtableone.na","\u2014")` if all values are missing, and if some
   values are missing replacing each individual missing value with  
-  `getOption("tableone.missing","<?>")`
+  `getOption("huxtableone.missing","<?>")`
 * `.sprintf_no_na`  - `sprintf`s a set of numbers replacing the output with 
-  `getOption("tableone.na","\u2014")` if any values are missing
+  `getOption("huxtableone.na","\u2014")` if any values are missing
 * `.maybe` - returns a string if it is present or "" if NA
 
 ```{r}
@@ -240,8 +240,8 @@ custom = list(
 
 # printing control the following options control missing values
 # produced by the .sprintf_na function:
-# getOption("tableone.missing","<?>")
-# getOption("tableone.na","\u2014")
+# getOption("huxtableone.missing","<?>")
+# getOption("huxtableone.na","\u2014")
 
 
 gcd %>% compare_population(
@@ -268,7 +268,7 @@ gcd %>% compare_population(
 * or we can choose to hide the footer altogether:
 
 ```{r}
-old = options("tableone.hide_footer"=TRUE)
+old = options("huxtableone.hide_footer"=TRUE)
 
 # or we can choose to hide the footer altogether
 gcd %>% compare_population(formula)

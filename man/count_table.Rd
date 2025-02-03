@@ -15,8 +15,8 @@ count_table(
   glue = list(`Count [\%] (N={sprintf("\%d",N)})` =
     "{sprintf(\\"\%d/\%d [\%1.1f\%\%]\\", x, n, mean*100)}"),
   label_fn = label_extractor(df),
-  font_size = getOption("tableone.font_size", 8),
-  font = getOption("tableone.font", "Arial")
+  font_size = getOption("huxtableone.font_size", 8),
+  font = getOption("huxtableone.font", "Arial")
 )
 }
 \arguments{
@@ -42,7 +42,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{font_size}{(optional) the font size for the table in points}

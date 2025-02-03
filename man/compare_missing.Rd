@@ -9,8 +9,8 @@ compare_missing(
   ...,
   label_fn = label_extractor(df),
   p_format = names(.pvalue.defaults),
-  font_size = getOption("tableone.font_size", 8),
-  font = getOption("tableone.font", "Arial"),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = getOption("huxtableone.font", "Arial"),
   significance_limit = 0.05,
   missingness_limit = 0.1,
   footer_text = NULL,
@@ -39,12 +39,12 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{p_format}{the format of the p-values: one of
 "sampl", "nejm", "jama", "lancet", "aim" but any value
-here is overridden by the \verb{option("tableone.pvalue_formatter"=function(...))}}
+here is overridden by the \verb{option("huxtableone.pvalue_formatter"=function(...))}}
 
 \item{font_size}{(optional) the font size for the table in points}
 
@@ -59,7 +59,7 @@ to include the predictor.}
 
 \item{footer_text}{any text that needs to be added at the end of the table,
 setting this to FALSE dsables the whole footer (as does
-\code{options("tableone.hide_footer"=TRUE)}).}
+\code{options("huxtableone.hide_footer"=TRUE)}).}
 
 \item{raw_output}{return comparison as tidy dataframe rather than formatted table}
 }
@@ -77,7 +77,7 @@ intervention.
 \examples{
 # this option lets us change the column name for p value from its default
 # "P value"
-old = options("tableone.pvalue_column_name"="p-value")
+old = options("huxtableone.pvalue_column_name"="p-value")
 
 # missing at random
 missing_diamonds \%>\% dplyr::group_by(is_colored) \%>\% compare_missing(tidyselect::everything())

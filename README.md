@@ -1,70 +1,68 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tableone: Descriptive Tables for Observational or Interventional Studies <a href='https://bristol-vaccine-centre.github.io/tableone/index.html'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# huxtableone: Descriptive Tables for Observational or Interventional Studies <a href='https://ai4ci.github.io/huxtableone/index.html'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/bristol-vaccine-centre/tableone/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bristol-vaccine-centre/tableone/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ai4ci/huxtableone/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ai4ci/huxtableone/actions/workflows/R-CMD-check.yaml)
 [![DOI](https://zenodo.org/badge/551386697.svg)](https://zenodo.org/badge/latestdoi/551386697)
-[![tableone status
-badge](https://bristol-vaccine-centre.r-universe.dev/badges/tableone)](https://bristol-vaccine-centre.r-universe.dev)
+[![huxtableone status
+badge](https://ai4ci.r-universe.dev/badges/huxtableone)](https://ai4ci.r-universe.dev)
 <!-- badges: end -->
 
-The goal of `tableone` is to make it easy to generate comparison tables
-for journal publication. It converts a line list of experimental or
-observational data into a summary table which can be grouped by an
+The goal of `huxtableone` is to make it easy to generate comparison
+tables for journal publication. It converts a line list of experimental
+or observational data into a summary table which can be grouped by an
 intervention. Reporting summaries of this kind of data has to be aware
 of missing items, and provide summary statistics and statistical
 comparisons that are appropriate for the data. This is amenable to some
 automated decision making but frequently such automation must be
-overridden. `tableone` provides an automated one command statistical
+overridden. `huxtableone` provides an automated one command statistical
 summary table the output of which is highly configurable. The resulting
-tables are in `huxtable` format ready for export into a wide range out
-file types.
+tables are in `huxtable` format ready for export into a wide range of
+output file types.
 
 ## Installation
 
-There is a different `tableone` package on CRAN. This package is hosted
-in the [Bristol Vaccine Centre
-r-universe](https://https://bristol-vaccine-centre.r-universe.dev/).
-Installation from there is as follows:
+This package is hosted in the [AI4CI
+r-universe](https://https://ai4ci.r-universe.dev/). Installation from
+there is as follows:
 
 ``` r
 options(repos = c(
-  "bristol-vaccine-centre" = 'https://bristol-vaccine-centre.r-universe.dev/',
+  "ai4ci" = 'https://ai4ci.r-universe.dev/',
   CRAN = 'https://cloud.r-project.org'))
 
-# Download and install tableone in R
-install.packages("tableone")
+# Download and install huxtableone in R
+install.packages("huxtableone")
 ```
 
-You can install the development version of `tableone` from
-[GitHub](https://github.com/bristol-vaccine-centre/tableone) with:
+You can install the development version of `huxtableone` from
+[GitHub](https://github.com/ai4ci/huxtableone) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("bristol-vaccine-centre/tableone")
+devtools::install_github("ai4ci/huxtableone")
 ```
 
 ## Example
 
-`tableone` is there to make descriptive statistics consistent and easy.
-Summarising the dataset in a a nicely formatted summary table is as
-simple as the following code. For the proper formatted output head to
-the [main documentation
-website](https://bristol-vaccine-centre.github.io/tableone/).
+`huxtableone` is there to make descriptive statistics consistent and
+easy. Summarising the dataset in a a nicely formatted summary table is
+as simple as the following code. For the proper formatted output head to
+the [main documentation website](https://ai4ci.github.io/huxtableone/).
 
 ``` r
 # hide messages 
-old = options(tableone.quiet = TRUE)
+old = options(huxtableone.quiet = TRUE)
 
 # generate table 
 iris %>% 
   describe_population(everything()) 
 ```
 
-<table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-2">
+<table class="huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  ">
 <col><col><col><col><tr>
 <th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0.5pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">Variable</th><th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0.5pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">Characteristic</th><th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0.5pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">Value</th><th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0.5pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">Count (N=150)</th></tr>
 <tr>
@@ -82,11 +80,11 @@ iris %>%
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 1pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">virginica % [95% CI]</td><td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 1pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">33.3% [26.3%—41.2%]</td><td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 1pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">50/150</td></tr>
 <tr>
-<td colspan="4" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">Normality of distributions determined using Anderson-Darling normality test</td></tr>
+<td colspan="4" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">Normal distributions determined by the Anderson-Darling test (P&gt;0.005)</td></tr>
 </table>
 
 As a `huxtable` output the table can be saved as a wide range of formats
 from spreadsheets or documents to latex and html (even as a github
-README.md with limited success). This default output of `tableone` can
-be very substantially customised to fit into a specific journal’s
+README.md with limited success). This default output of `huxtableone`
+can be very substantially customised to fit into a specific journal’s
 requirements.

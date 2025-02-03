@@ -27,7 +27,7 @@ numeric columns are converted to factor levels. If a single value is given
 then all numerics are converted in the same way (this is the default). If
 there are some values that you are not certain you want to convert setting
 a limit on the maximum number of levels in a generated factor may be a good
-idea (i.e. \code{options("tableone.max_discrete_levels"=16)}) otherwise all
+idea (i.e. \code{options("huxtableone.max_discrete_levels"=16)}) otherwise all
 values are converted}
 
 \item{.character}{in general character columns are converted into a factor with
@@ -67,7 +67,7 @@ diamonds \%>\% dplyr::mutate(is_colored = color > "F") \%>\%
 # in this example picks up the `depth` and `table` columns as exceeding this
 # new limit:
 
-old = options("tableone.max_discrete_levels"=16)
+old = options("huxtableone.max_discrete_levels"=16)
 diamonds \%>\% dplyr::mutate(is_colored = color > "F") \%>\%
   make_factors(tidyselect::everything(), .numeric="{toupper(name)}={round(value)}") \%>\%
   dplyr::glimpse()

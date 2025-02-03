@@ -14,5 +14,5 @@ tibble(col="cell") %>%
 ```
 
 ```{r}
-paste0("```R\n",paste0(.f(tableone::default.format$relaxed),collapse="\n"),"\n```") %>% knitr::asis_output()
+paste0("```R\n",paste0(.f(huxtableone::default.format$relaxed),collapse="\n"),"\n```") %>% knitr::asis_output()
 ```

@@ -27,7 +27,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{units}{(optional) a named list of units, following a \verb{c(<colname_1> = "<unit_1>", <colname_2> = "<unit_2>", ...)} format. columns not present in

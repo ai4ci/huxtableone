@@ -12,7 +12,7 @@
 
 #' Format a p-value
 #'
-#' Uses the default formatter set globally in `options("tableone.pvalue_formatter")` in
+#' Uses the default formatter set globally in `options("huxtableone.pvalue_formatter")` in
 #' preference the one defined by `p_format` which is only used if no default is set.
 #'
 #' @param p.value the p-value to be formatted
@@ -22,7 +22,7 @@
 #' @export
 format_pvalue = function(p.value, p_format = names(.pvalue.defaults)) {
   p_format = match.arg(p_format)
-  fun = getOption("tableone.pvalue_formatter",.pvalue.defaults[[p_format]])
+  fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
   fun(p.value)
 }
 
@@ -30,7 +30,7 @@ format_pvalue = function(p.value, p_format = names(.pvalue.defaults)) {
 
 # .sprintf_no_na("%1.0f %s",c(1.0,2.0),c(NA,"sdfsdf"))
 .sprintf_no_na = function(fmt, ...) {
-  .na.value = getOption("tableone.na","\u2014")
+  .na.value = getOption("huxtableone.na","\u2014")
   dots = rlang::list2(...)
   # this is a listwise OR:
   any_na = lapply(dots, is.na) %>% purrr::reduce(.f = `|`)
@@ -41,8 +41,8 @@ format_pvalue = function(p.value, p_format = names(.pvalue.defaults)) {
 # .sprintf_na("%1.0f %s",c(1.0,2.0),c(NA,"sdfsdf"))
 # .sprintf_na("%1.0f %s",c(1.0,2.0,Inf,NA),c(NA,"sdfsdf","inf",NA))
 .sprintf_na = function(fmt, ...) {
-  .na.value = getOption("tableone.na","\u2014")
-  .missing = getOption("tableone.missing","<?>")
+  .na.value = getOption("huxtableone.na","\u2014")
+  .missing = getOption("huxtableone.missing","<?>")
   dots = rlang::list2(...)
   dots = dots %>% purrr::map( ~ ifelse(is.infinite(.x) | is.nan(.x), NA, .x))
   all_na = lapply(dots, is.na) %>% purrr::reduce(.f = `&`)
@@ -55,7 +55,7 @@ format_pvalue = function(p.value, p_format = names(.pvalue.defaults)) {
 ### post hoc change sprintf dp ----
 
 # .replace_dp(c("1.0",".3","1.2.3","a.3", "[1.2]"), sep="\u00B7")
-.replace_dp = function(c, sep=getOption("tableone.dp",".")) {
+.replace_dp = function(c, sep=getOption("huxtableone.dp",".")) {
   if (sep==".") return(c)
   c %>% stringr::str_replace_all("([^A-Za-z0-9.]|\\s|^)([0-9]*)\\.([0-9]+)(?!\\.)", paste0("\\1\\2",sep,"\\3"))
 }

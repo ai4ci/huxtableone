@@ -29,7 +29,7 @@
       dplyr::pull(p.value) %>% p_fun()
     # q = tmp %>% dplyr::select(.significance_test) %>% tidyr::unnest(.significance_test) %>%
     #   dplyr::pull(p.method)
-    p_col = getOption("tableone.pvalue_column_name","P value")
+    p_col = getOption("huxtableone.pvalue_column_name","P value")
     return(sprintf("%s [%s: %s]",s,p_col,p))
 
   }
@@ -106,7 +106,7 @@
 #' @param power_analysis conduct sample size based power analysis.
 #' @param override_power if you want to override the power calculation method for a
 #'   particular variable the options are
-#'   `r paste0("\"", names(tableone:::.power.fns), "\"", collapse= ",")` and you
+#'   `r paste0("\"", names(huxtableone:::.power.fns), "\"", collapse= ",")` and you
 #'   specify this on a column by column bases with a named list (e.g
 #'   `c("Petal.Width"="t-test")`)
 #'
@@ -148,7 +148,7 @@ extract_comparison = function(
     raw_output = FALSE
 ) {
 
-  rlang::warn("extract_comparison is deprecated and wil be removed in future versions of tableone",
+  rlang::warn("extract_comparison is deprecated and wil be removed in future versions of huxtableone",
               .frequency = "once",.frequency_id = "dep_ext_comp")
 
   sign = as_t1_signif(
@@ -164,7 +164,7 @@ extract_comparison = function(
   if (raw_output) return(sign)
 
   p_format = match.arg(p_format)
-  p_fun = getOption("tableone.pvalue_formatter",.pvalue.defaults[[p_format]])
+  p_fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
   return(list(
     compare = .comparison_printer(sign, intervention, p_fun),
     filter = .data_filter(sign, intervention),

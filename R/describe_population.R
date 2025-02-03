@@ -38,7 +38,7 @@
 #' # variable while we are at it we will use a mid point for the decimal point,
 #' # and make the variable labels sentence case.
 #'
-#' old = options("tableone.dp"="\u00B7")
+#' old = options("huxtableone.dp"="\u00B7")
 #' missing_diamonds %>%
 #'   explicit_na() %>%
 #'   describe_population(
@@ -56,8 +56,8 @@ describe_population = function(
     layout = "single",
     override_percent_dp = list(),
     override_real_dp = list(),
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     footer_text = NULL,
     show_binary_value=NULL,
     raw_output = FALSE
@@ -108,7 +108,7 @@ describe_population = function(
 #'   would be some form of [dplyr::case_when] lookup, or a string function such
 #'   as [stringr::str_to_sentence]. (N.b. this function must be vectorised).
 #'   Any value provided here will be overridden by the
-#'   `options("tableone.labeller" = my_label_fn)` which allows global setting of
+#'   `options("huxtableone.labeller" = my_label_fn)` which allows global setting of
 #'   the labeller.
 #' @param units (optional) a named list of units, following a `c(<colname_1> =
 #'   "<unit_1>", <colname_2> = "<unit_2>", ...)` format. columns not present in
@@ -118,7 +118,7 @@ describe_population = function(
 #'   default type for a column in a data set are calculated using heurisitics
 #'   depending on the nature of the data (categorical or continuous), and result
 #'   of normality tests. if you want to override this the options are
-#'   `r paste0("\"", names(tableone:::.summary_types), "\"", collapse= ",")` and you
+#'   `r paste0("\"", names(huxtableone:::.summary_types), "\"", collapse= ",")` and you
 #'   specify this on a column by column bases with a named list (e.g
 #'   `c("Petal.Width"="mean_sd")`). Overriding the default does not check the
 #'   type of data is correct for the summary type and will potentially cause
@@ -164,21 +164,21 @@ as_huxtable.t1_summary = function(
     layout = "single",
     override_percent_dp = list(),
     override_real_dp = list(),
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     footer_text = NULL,
     show_binary_value=NULL
 ) {
   if (is.list(layout)) {
     format = layout
   } else {
-    format = getOption("tableone.format_list", default.format[[layout]])
+    format = getOption("huxtableone.format_list", default.format[[layout]])
   }
 
   grps = x %>% dplyr::groups()
 
-  variable_col = as.symbol(getOption("tableone.variable_column_name","Variable"))
-  characteristic_col = as.symbol(getOption("tableone.characteristic_column_name","Characteristic"))
+  variable_col = as.symbol(getOption("huxtableone.variable_column_name","Variable"))
+  characteristic_col = as.symbol(getOption("huxtableone.characteristic_column_name","Characteristic"))
   fmt = .format_summary(x, format=format, override_percent_dp = override_percent_dp, override_real_dp=override_real_dp, show_binary_value=show_binary_value)
 
   fmt = fmt %>% dplyr::rename(
@@ -201,7 +201,7 @@ as_huxtable.t1_summary = function(
       footer
     )
   }
-  if (!getOption("tableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
     hux = hux %>%
       huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
       huxtable::set_bottom_border(row=huxtable::final(),value=0)
@@ -211,7 +211,7 @@ as_huxtable.t1_summary = function(
 
 # print the summary stats for each of the columns of a dataframe, into
 # a prettified table with control for layout as defined in default.format
-# this can be overwritten in "tableone.format_list" option
+# this can be overwritten in "huxtableone.format_list" option
 # df_shape = diamonds %>%  dplyr::mutate(is_clear = ifelse(clarity>"VS2","clear","less clear")) %>% dplyr::group_by(is_clear) %>% .get_shape()
 # df_summary = df_shape %>% .summary_stats()
 # df_summary %>% .format_summary()

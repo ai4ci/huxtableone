@@ -120,7 +120,7 @@
   }
 
   comp_grps = df_shape$.source %>% purrr::map(~ dplyr::groups(.x)) %>% unique()
-  if (length(comp_grps) != 1) stop("multiple different interventions detected. please raise this as a big in tableone")
+  if (length(comp_grps) != 1) stop("multiple different interventions detected. please raise this as a big in huxtableone")
   intervention = purrr::list_c(comp_grps) %>% unique()
   if (length(intervention) > 1) warning("Intervention grouping is defined over multiple columns. Support for this is experimental.")
   intervention_levels = df_shape$.source %>%

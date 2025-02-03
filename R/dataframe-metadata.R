@@ -152,12 +152,12 @@ any columns."
 
   df = df %>% dplyr::ungroup()
 
-  label_fn = getOption("tableone.labeller",label_fn)
+  label_fn = getOption("huxtableone.labeller",label_fn)
   label_fn = purrr::as_mapper(label_fn)
 
-  max_levels = getOption("tableone.max_discrete_levels",0)
-  normality_test = getOption("tableone.normality_test","ad")
-  normality_signif = getOption("tableone.normality_significance",0.005)
+  max_levels = getOption("huxtableone.max_discrete_levels",0)
+  normality_test = getOption("huxtableone.normality_test","ad")
+  normality_signif = getOption("huxtableone.normality_significance",0.005)
 
   not_matched = setdiff(.col_names(cols), colnames(df))
   if (length(not_matched)>0) {
@@ -206,8 +206,8 @@ any columns."
 
 .determine_comparison_method = function(df_shape) {
 
-  normality_signif = getOption("tableone.normality_significance",0.005)
-  ties_cutoff = getOption("tableone.tolerance_to_ties",0.25)
+  normality_signif = getOption("huxtableone.normality_significance",0.005)
+  ties_cutoff = getOption("huxtableone.tolerance_to_ties",0.25)
 
   if (!".comparison_method" %in% colnames(df_shape)) {
     # what kind of summary stats?
@@ -241,8 +241,8 @@ any columns."
 }
 
 .describe_normality_test = function() {
-  normality_test = getOption("tableone.normality_test","ad")
-  normality_signif = getOption("tableone.normality_significance",0.005)
+  normality_test = getOption("huxtableone.normality_test","ad")
+  normality_signif = getOption("huxtableone.normality_significance",0.005)
   sprintf("Normal distributions determined by the %s (P>%1.1g)",
     .normality.tests[[normality_test]]$name,
     normality_signif

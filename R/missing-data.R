@@ -35,7 +35,7 @@
 #' @examples
 #' # this option lets us change the column name for p value from its default
 #' # "P value"
-#' old = options("tableone.pvalue_column_name"="p-value")
+#' old = options("huxtableone.pvalue_column_name"="p-value")
 #'
 #' # missing at random
 #' missing_diamonds %>% dplyr::group_by(is_colored) %>% compare_missing(tidyselect::everything())
@@ -52,8 +52,8 @@ compare_missing = function(
     ...,
     label_fn = label_extractor(df),
     p_format = names(.pvalue.defaults),
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     significance_limit = 0.05,
     missingness_limit = 0.1,
     footer_text = NULL,
@@ -77,8 +77,8 @@ compare_missing = function(
     cols = cols %>% setdiff(intervention)
   }
 
-  if (df %>% dplyr::n_groups() > getOption("tableone.max_comparisons",10)) {
-    stop("The number of groups being compared is ",df %>% dplyr::n_groups()," which is more than the maximum allowed by `options('tableone.max_comparisons'=...)`, which is currently ",getOption("tableone.max_comparisons",10))
+  if (df %>% dplyr::n_groups() > getOption("huxtableone.max_comparisons",10)) {
+    stop("The number of groups being compared is ",df %>% dplyr::n_groups()," which is more than the maximum allowed by `options('huxtableone.max_comparisons'=...)`, which is currently ",getOption("huxtableone.max_comparisons",10))
   }
 
   footer = footer_text
@@ -95,7 +95,7 @@ compare_missing = function(
   summary = .summary_stats(shape)
   fmt = .format_summary(summary, format = default.format$missing, show_binary_value="missing") %>%
     dplyr::select(-characteristic)
-  p_col = as.symbol(getOption("tableone.pvalue_column_name","P value"))
+  p_col = as.symbol(getOption("huxtableone.pvalue_column_name","P value"))
   sign = .significance_tests(summary)
 
   comparisons = nrow(sign)
@@ -124,7 +124,7 @@ compare_missing = function(
     dplyr::relocate(2, .after = tidyselect::everything())
   tmp = get_footer_text(sign)
 
-  if (!getOption("tableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
     hux = hux %>%
       huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
       huxtable::set_bottom_border(row=huxtable::final(),value=0)
@@ -209,7 +209,7 @@ remove_missing = function(df,
 }
 
 .missing_message = function(too_missing, missingness_limit, label_fn) {
-  label_fn = getOption("tableone.labeller",label_fn)
+  label_fn = getOption("huxtableone.labeller",label_fn)
   sprintf("More than %1.0f%% of data is missing for variables %s.",
           missingness_limit*100,
           paste0(
@@ -219,7 +219,7 @@ remove_missing = function(df,
 }
 
 .mnar_message = function(mnar, intervention, significance_limit, comparisons, label_fn) {
-  label_fn = getOption("tableone.labeller",label_fn)
+  label_fn = getOption("huxtableone.labeller",label_fn)
   sprintf("Data is missing not at random (compared to %s) at a p-value<%1.3f (%1.2f over %d comparisons) for variables %s.",
           paste0(
             lapply(sapply(intervention, rlang::as_label),label_fn),

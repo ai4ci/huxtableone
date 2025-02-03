@@ -15,6 +15,6 @@ format_pvalue(p.value, p_format = names(.pvalue.defaults))
 a formatted P-value
 }
 \description{
-Uses the default formatter set globally in \code{options("tableone.pvalue_formatter")} in
+Uses the default formatter set globally in \code{options("huxtableone.pvalue_formatter")} in
 preference the one defined by \code{p_format} which is only used if no default is set.
 }

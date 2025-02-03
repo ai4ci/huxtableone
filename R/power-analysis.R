@@ -203,8 +203,8 @@
 
 .power_analysis = function(df_shape, override_power = list()) {
 
-  significance_limit = getOption("tableone.significance_limit",0.05)
-  power = getOption("tableone.power",0.8)
+  significance_limit = getOption("huxtableone.significance_limit",0.05)
+  power = getOption("huxtableone.power",0.8)
 
   # See if user wants to override?
   if (length(override_power) > 0) {

@@ -4,8 +4,8 @@ authors:
 - family-names: "Challen"
   given-names: "Robert"
   orcid: "https://orcid.org/0000-0002-5504-7768"
-title: "tableone: Descriptive Tables for Observational or Interventional Studies"
+title: "huxtableone: Descriptive Tables for Observational or Interventional Studies"
 version: 0.3.0
-doi: 10.5281/zenodo.7226522
+doi: 10.5281/zenodo.14794616
 date-released: 2023-01-01
-url: "https://github.com/bristol-vaccine-centre/tableone"
+url: "https://github.com/ai4ci/huxtableone"

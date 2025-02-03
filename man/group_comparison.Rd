@@ -40,7 +40,7 @@ fields in the summary data to convert to percentages.}
 
 \item{p_format}{the format of the p-values: one of
 "sampl", "nejm", "jama", "lancet", "aim" but any value
-here is overridden by the \verb{option("tableone.pvalue_formatter"=function(...))}}
+here is overridden by the \verb{option("huxtableone.pvalue_formatter"=function(...))}}
 
 \item{no_summary}{only extract significance test values}
 
@@ -74,7 +74,7 @@ until a satisfactory result is obtained.
 }
 \description{
 At some point we need to take information from the tables produced by
-\code{tableone} and place it into the main text of the document. It is annoying
+\code{huxtableone} and place it into the main text of the document. It is annoying
 if this cannot be done automatically. the \code{group_comparison()} function enables
 extraction of one or more head to head comparisons and provides a fairly
 flexible mechanism for building the precise format desired.

@@ -24,8 +24,8 @@ describe_data = function(
     label_fn = label_extractor(df),
     units = extract_units(df),
     layout = "single",
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     footer_text = NULL,
     raw_output = FALSE
 ) {
@@ -67,7 +67,7 @@ describe_data = function(
 #'   would be some form of [dplyr::case_when] lookup, or a string function such
 #'   as [stringr::str_to_sentence]. (N.b. this function must be vectorised).
 #'   Any value provided here will be overridden by the
-#'   `options("tableone.labeller" = my_label_fn)` which allows global setting of
+#'   `options("huxtableone.labeller" = my_label_fn)` which allows global setting of
 #'   the labeller.
 #' @param units (optional) a named list of units, following a `c(<colname_1> =
 #'   "<unit_1>", <colname_2> = "<unit_2>", ...)` format. columns not present in
@@ -107,20 +107,20 @@ as_huxtable.t1_shape = function(
     x,
     ...,
     # layout = "single",
-    font_size = getOption("tableone.font_size",8),
-    font = getOption("tableone.font","Arial"),
+    font_size = getOption("huxtableone.font_size",8),
+    font = getOption("huxtableone.font","Arial"),
     footer_text = NULL,
     show_binary_value=NULL
 ) {
   # if (is.list(layout)) {
   #   format = layout
   # } else {
-  #   format = getOption("tableone.format_list", default.format[[layout]])
+  #   format = getOption("huxtableone.format_list", default.format[[layout]])
   # }
 
   grps = x %>% dplyr::groups()
 
-  variable_col = as.symbol(getOption("tableone.variable_column_name","Variable"))
+  variable_col = as.symbol(getOption("huxtableone.variable_column_name","Variable"))
   fmt = .format_shape(x) #, format=format)
 
   fmt = fmt %>% dplyr::rename(
@@ -142,7 +142,7 @@ as_huxtable.t1_shape = function(
       footer
     )
   }
-  if (!getOption("tableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
     hux = hux %>%
       huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
       huxtable::set_bottom_border(row=huxtable::final(),value=0)

@@ -13,8 +13,8 @@ describe_population(
   layout = "single",
   override_percent_dp = list(),
   override_real_dp = list(),
-  font_size = getOption("tableone.font_size", 8),
-  font = getOption("tableone.font", "Arial"),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = getOption("huxtableone.font", "Arial"),
   footer_text = NULL,
   show_binary_value = NULL,
   raw_output = FALSE
@@ -41,7 +41,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{units}{(optional) a named list of units, following a \verb{c(<colname_1> = "<unit_1>", <colname_2> = "<unit_2>", ...)} format. columns not present in
@@ -59,9 +59,9 @@ type of data is correct for the summary type and will potentially cause
 errors if this is not done correctly.}
 
 \item{layout}{(optional) various layouts are defined as default. As of this
-version of \code{tableone} they are
+version of \code{huxtableone} they are
 "relaxed","compact","micro","simple","single","missing". The layouts can be
-customised using the options \verb{options("tableone.format_list"=list(...)")},
+customised using the options \verb{options("huxtableone.format_list"=list(...)")},
 and this is described in more detail in the vignettes.}
 
 \item{override_percent_dp}{(optional) a named list of overrides for the default
@@ -71,7 +71,7 @@ will use the defaults defined in the layout. See the vignette on customisation.}
 \item{override_real_dp}{(optional) a named list of overrides for the default
 precision of formatting real values, following a \verb{c(<colname_1> = 2, <colname_2> = 4, ...)} format. columns not present in this list
 will use the defaults defined in the layout. See the
-\code{utils::vignette("customisation", package="tableone")}.}
+\code{utils::vignette("customisation", package="huxtableone")}.}
 
 \item{font_size}{(optional) the font size for the table in points}
 
@@ -80,7 +80,7 @@ closest on your system)}
 
 \item{footer_text}{any text that needs to be added at the end of the table,
 setting this to FALSE dsables the whole footer (as does
-\code{options("tableone.hide_footer"=TRUE)}).}
+\code{options("huxtableone.hide_footer"=TRUE)}).}
 
 \item{show_binary_value}{if set this will filter the display of covariates where the number of possibilities
 is exactly 2 to this value.}
@@ -122,7 +122,7 @@ missing_diamonds \%>\% explicit_na() \%>\%
 # variable while we are at it we will use a mid point for the decimal point,
 # and make the variable labels sentence case.
 
-old = options("tableone.dp"="\u00B7")
+old = options("huxtableone.dp"="\u00B7")
 missing_diamonds \%>\%
   explicit_na() \%>\%
   describe_population(

@@ -1,11 +1,10 @@
-pandoc: 3.1.1
-pkgdown: 2.0.7
+pandoc: 3.1.13
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   configuration: configuration.html
-  tableone: tableone.html
-last_built: 2024-01-06T15:25Z
+  huxtableone: huxtableone.html
+last_built: 2025-02-03T16:06Z
 urls:
-  reference: https://bristol-vaccine-centre.github.io/tableone/reference
-  article: https://bristol-vaccine-centre.github.io/tableone/articles
-
+  reference: https://ai4ci.github.io/huxtableone/reference
+  article: https://ai4ci.github.io/huxtableone/articles

@@ -8,7 +8,7 @@
 
     <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
-    <a class="navbar-brand me-2" href="../index.html">tableone</a>
+    <a class="navbar-brand me-2" href="../index.html">huxtableone</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
@@ -19,7 +19,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/tableone.html">Get started</a>
+  <a class="nav-link" href="../articles/huxtableone.html">Get started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -27,14 +27,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/configuration.html">tableone: Configuration</a>
+    <a class="dropdown-item" href="../articles/configuration.html">huxtableone: Configuration</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/bristol-vaccine-centre/tableone/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/ai4ci/huxtableone/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get summary comparisons and statistics between variables as raw data.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bristol-vaccine-centre/tableone/blob/HEAD/R/tableone.R" class="external-link"><code>R/tableone.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ai4ci/huxtableone/blob/HEAD/R/huxtableone.R" class="external-link"><code>R/huxtableone.R</code></a></small>
       <div class="d-none name"><code>compare_variables.Rd</code></div>
     </div>
 
@@ -92,7 +92,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of <a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when</a> lookup, or a string function such
 as <a href="https://stringr.tidyverse.org/reference/case.html" class="external-link">stringr::str_to_sentence</a>. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-<code>options("tableone.labeller" = my_label_fn)</code> which allows global setting of
+<code>options("huxtableone.labeller" = my_label_fn)</code> which allows global setting of
 the labeller.</p></dd>
 
 
@@ -111,7 +111,7 @@ errors if this is not done correctly.</p></dd>
 <dt>p_format</dt>
 <dd><p>the format of the p-values: one of
 "sampl", "nejm", "jama", "lancet", "aim" but any value
-here is overridden by the <code>option("tableone.pvalue_formatter"=function(...))</code></p></dd>
+here is overridden by the <code>option("huxtableone.pvalue_formatter"=function(...))</code></p></dd>
 
 </dl></div>
     <div class="section level2">

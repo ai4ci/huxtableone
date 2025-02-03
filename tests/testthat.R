@@ -8,6 +8,6 @@
 
 library(testthat)
 
-library(tableone)
+library(huxtableone)
 
-test_check("tableone")
+test_check("huxtableone")

@@ -27,11 +27,11 @@ count_table = function(df, rowGroupVars, colGroupVars,
                         'Count [%] (N={sprintf("%d",N)})' = '{sprintf("%d/%d [%1.1f%%]", x, n, mean*100)}'
                       ),
                       label_fn = label_extractor(df),
-                      font_size = getOption("tableone.font_size",8),
-                      font = getOption("tableone.font","Arial")
+                      font_size = getOption("huxtableone.font_size",8),
+                      font = getOption("huxtableone.font","Arial")
 ) {
 
-  label_fn = getOption("tableone.labeller",label_fn)
+  label_fn = getOption("huxtableone.labeller",label_fn)
   label_fn = purrr::as_mapper(label_fn)
 
   rowGroupVars2 = label_fn(sapply(rowGroupVars, rlang::as_label)) %>% lapply(as.symbol)

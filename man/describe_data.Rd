@@ -10,8 +10,8 @@ describe_data(
   label_fn = label_extractor(df),
   units = extract_units(df),
   layout = "single",
-  font_size = getOption("tableone.font_size", 8),
-  font = getOption("tableone.font", "Arial"),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = getOption("huxtableone.font", "Arial"),
   footer_text = NULL,
   raw_output = FALSE
 )
@@ -37,7 +37,7 @@ will contain the dataframe column names as labels. A simple alternative
 would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
-\code{options("tableone.labeller" = my_label_fn)} which allows global setting of
+\code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of
 the labeller.}
 
 \item{units}{(optional) a named list of units, following a \verb{c(<colname_1> = "<unit_1>", <colname_2> = "<unit_2>", ...)} format. columns not present in
@@ -45,9 +45,9 @@ this list are assumed to have no units. Units may be involved in the
 formatting of the summary output.}
 
 \item{layout}{(optional) various layouts are defined as default. As of this
-version of \code{tableone} they are
+version of \code{huxtableone} they are
 "relaxed","compact","micro","simple","single","missing". The layouts can be
-customised using the options \verb{options("tableone.format_list"=list(...)")},
+customised using the options \verb{options("huxtableone.format_list"=list(...)")},
 and this is described in more detail in the vignettes.}
 
 \item{font_size}{(optional) the font size for the table in points}
@@ -57,7 +57,7 @@ closest on your system)}
 
 \item{footer_text}{any text that needs to be added at the end of the table,
 setting this to FALSE dsables the whole footer (as does
-\code{options("tableone.hide_footer"=TRUE)}).}
+\code{options("huxtableone.hide_footer"=TRUE)}).}
 
 \item{raw_output}{return comparison as \code{t1_signif} dataframe rather than formatted table}
 }

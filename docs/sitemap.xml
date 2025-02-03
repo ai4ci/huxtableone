@@ -1,141 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/404.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/articles/configuration.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/articles/tableone.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_huxtable.t1_shape.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_huxtable.t1_signif.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_huxtable.t1_summary.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_t1_shape.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_t1_signif.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_t1_summary.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/as_vars.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/bad_test_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/compare_missing.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/compare_outcomes.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/compare_population.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/compare_variables.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/count_table.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/cut_integer.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/default.format.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/describe_data.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/describe_population.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/diamonds.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/explicit_na.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/extract_comparison.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/extract_units.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/format_pvalue.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/get_footer_text.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/group_comparison.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/label_extractor.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/make_factors.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/missing_diamonds.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/mnar_two_class_1000.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/multi_class_negative.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/one_class_test_100.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/one_class_test_1000.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/remove_missing.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/set_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/set_units.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/test_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://bristol-vaccine-centre.github.io/tableone/reference/two_class_test.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://ai4ci.github.io/huxtableone/404.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/LICENSE-text.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/LICENSE.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/articles/configuration.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/articles/huxtableone.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/articles/index.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/articles/tableone.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/authors.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/index.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_huxtable.t1_shape.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_huxtable.t1_signif.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_huxtable.t1_summary.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_t1_shape.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_t1_signif.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_t1_summary.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/as_vars.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/bad_test_cols.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/compare_missing.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/compare_outcomes.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/compare_population.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/compare_variables.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/count_table.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/cut_integer.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/default.format.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/describe_data.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/describe_population.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/diamonds.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_bind_rows.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_default_layout.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_insert_start.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_nest_group.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_set_caption.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_set_font.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_set_footer.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_substitute_fonts.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_tidy.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/explicit_na.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/extract_comparison.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/extract_units.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/format_pvalue.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/get_footer_text.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/group_comparison.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/index.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/label_extractor.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/make_factors.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/missing_diamonds.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/mnar_two_class_1000.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/multi_class_negative.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/one_class_test_100.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/one_class_test_1000.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/pipe.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/remove_missing.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/set_labels.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/set_units.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/test_cols.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/two_class_test.html</loc></url>
 </urlset>
+
