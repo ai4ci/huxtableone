@@ -6,16 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Descriptive Tables for Observational or Interventional Studies • huxtableone</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
+<script src="deps/jquery-3.6.1/jquery-3.6.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Descriptive Tables for Observational or Interventional Studies">
 <meta name="description" content="Generating tabular summaries of data in a format suitable for reporting in journal articles is fiddly and slows down more detailed analysis. Comparing two populations with respect to an intervention, and reporting it is a task that can be largely automated.">
 <meta property="og:description" content="Generating tabular summaries of data in a format suitable for reporting in journal articles is fiddly and slows down more detailed analysis. Comparing two populations with respect to an intervention, and reporting it is a task that can be largely automated.">
@@ -29,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">huxtableone</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,11 +66,11 @@
 </div>
 <!-- badges: start -->
 
-<p>The goal of <code>huxtableone</code> is to make it easy to generate comparison tables for journal publication. It converts a line list of experimental or observational data into a summary table which can be grouped by an intervention. Reporting summaries of this kind of data has to be aware of missing items, and provide summary statistics and statistical comparisons that are appropriate for the data. This is amenable to some automated decision making but frequently such automation must be overridden. <code>huxtableone</code> provides an automated one command statistical summary table the output of which is highly configurable. The resulting tables are in <code>huxtable</code> format ready for export into a wide range out file types.</p>
+<p>The goal of <code>huxtableone</code> is to make it easy to generate comparison tables for journal publication. It converts a line list of experimental or observational data into a summary table which can be grouped by an intervention. Reporting summaries of this kind of data has to be aware of missing items, and provide summary statistics and statistical comparisons that are appropriate for the data. This is amenable to some automated decision making but frequently such automation must be overridden. <code>huxtableone</code> provides an automated one command statistical summary table the output of which is highly configurable. The resulting tables are in <code>huxtable</code> format ready for export into a wide range of output file types.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>There is a different <code>huxtableone</code> package on CRAN. This package is hosted in the <a href="https://https://ai4ci.r-universe.dev/" class="external-link">Bristol Vaccine Centre r-universe</a>. Installation from there is as follows:</p>
+<p>This package is hosted in the <a href="https://https://ai4ci.r-universe.dev/" class="external-link">AI4CI r-universe</a>. Installation from there is as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"ai4ci"</span> <span class="op">=</span> <span class="st">'https://ai4ci.r-universe.dev/'</span>,</span>
@@ -95,7 +94,7 @@
 <span><span class="co"># generate table </span></span>
 <span><span class="va">iris</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/describe_population.html">describe_population</a></span><span class="op">(</span><span class="fu">everything</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<table class="table huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-2">
+<table class="table huxtable" data-quarto-disable-processing="true" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  ">
 <col>
 <col>
 <col>
@@ -208,7 +207,7 @@ virginica % [95% CI]
 </tr>
 <tr>
 <td colspan="4" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 0pt 0pt 0pt;    padding: 0pt 2pt 0pt 2pt; font-weight: normal; font-family: Arial; font-size: 8pt;">
-Normality of distributions determined using Anderson-Darling normality test
+Normal distributions determined by the Anderson-Darling test (P&gt;0.005)
 </td>
 </tr>
 </table>
@@ -242,7 +241,7 @@ Normality of distributions determined using Anderson-Darling normality test
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Robert Challen <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5504-7768" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Robert Challen <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5504-7768" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -264,7 +263,7 @@ Normality of distributions determined using Anderson-Darling normality test
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

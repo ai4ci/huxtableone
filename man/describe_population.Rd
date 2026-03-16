@@ -7,14 +7,14 @@
 describe_population(
   df,
   ...,
-  label_fn = label_extractor(df),
+  label_fn = NULL,
   units = extract_units(df),
   override_type = list(),
   layout = "single",
   override_percent_dp = list(),
   override_real_dp = list(),
   font_size = getOption("huxtableone.font_size", 8),
-  font = getOption("huxtableone.font", "Arial"),
+  font = .default_font(),
   footer_text = NULL,
   show_binary_value = NULL,
   raw_output = FALSE
@@ -38,7 +38,7 @@ this kind of table).}
 \item{label_fn}{(optional) a function for mapping a co-variate column name to
 printable label. This is by default a no-operation and the output table
 will contain the dataframe column names as labels. A simple alternative
-would be some form of \link[dplyr:case_when]{dplyr::case_when} lookup, or a string function such
+would be some form of \link[dplyr:case-and-replace-when]{dplyr::case_when} lookup, or a string function such
 as \link[stringr:case]{stringr::str_to_sentence}. (N.b. this function must be vectorised).
 Any value provided here will be overridden by the
 \code{options("huxtableone.labeller" = my_label_fn)} which allows global setting of

@@ -34,38 +34,43 @@
 #'
 #' options(old)
 compare_population = function(
-    df,
-    ...,
-    label_fn = label_extractor(df),
-    units = extract_units(df),
-    override_type = list(),
-    override_method = list(),
-    layout = "compact",
-    override_percent_dp = list(),
-    override_real_dp = list(),
-    p_format = names(.pvalue.defaults),
-    font_size = getOption("huxtableone.font_size",8),
-    font = getOption("huxtableone.font","Arial"),
-    footer_text = NULL,
-    show_binary_value = NULL,
-    raw_output = FALSE
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df),
+  override_type = list(),
+  override_method = list(),
+  layout = "compact",
+  override_percent_dp = list(),
+  override_real_dp = list(),
+  p_format = names(.pvalue.defaults),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  show_binary_value = NULL,
+  raw_output = FALSE
 ) {
   sign = as_t1_signif(
-    df, ...,
+    df,
+    ...,
     label_fn = label_fn,
     units = units,
     override_type = override_type,
     override_method = override_method
   )
-  if (raw_output) return(sign)
-  as_huxtable.t1_signif(sign, layout = layout,
-                        override_percent_dp = override_percent_dp,
-                        override_real_dp=override_real_dp,
-                        p_format = p_format,
-                        font_size = font_size,
-                        font = font,
-                        footer_text = footer_text,
-                        show_binary_value = show_binary_value
+  if (raw_output) {
+    return(sign)
+  }
+  as_huxtable.t1_signif(
+    sign,
+    layout = layout,
+    override_percent_dp = override_percent_dp,
+    override_real_dp = override_real_dp,
+    p_format = p_format,
+    font_size = font_size,
+    font = font,
+    footer_text = footer_text,
+    show_binary_value = show_binary_value
   )
 }
 
@@ -91,50 +96,79 @@ compare_population = function(
 #'
 #' @return a `huxtable` formatted table.
 #' @export
-compare_outcomes = function(df,
-                            ...,
-                            label_fn = label_extractor(df),
-                            units = extract_units(df),
-                            override_type = list(),
-                            layout = "compact",
-                            override_percent_dp = list(),
-                            override_real_dp = list(),
-                            p_format = names(.pvalue.defaults),
-                            font_size = getOption("huxtableone.font_size",8),
-                            font = getOption("huxtableone.font","Arial"),
-                            footer_text = NULL,
-                            show_binary_value = NULL,
-                            raw_output = FALSE
+compare_outcomes = function(
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df),
+  override_type = list(),
+  layout = "compact",
+  override_percent_dp = list(),
+  override_real_dp = list(),
+  p_format = names(.pvalue.defaults),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  show_binary_value = NULL,
+  raw_output = FALSE
 ) {
   if (!.is_formula_interface(...)) {
-    compare_population(df, ..., label_fn = label_fn, units = units,
-                       override_type = override_type, layout = layout, override_percent_dp = override_percent_dp,
-                       override_real_dp = override_real_dp, p_format = p_format, font_size = font_size,
-                       font = font, footer_text = footer_text, show_binary_value = show_binary_value,
-                       raw_output = raw_output
+    compare_population(
+      df,
+      ...,
+      label_fn = label_fn,
+      units = units,
+      override_type = override_type,
+      layout = layout,
+      override_percent_dp = override_percent_dp,
+      override_real_dp = override_real_dp,
+      p_format = p_format,
+      font_size = font_size,
+      font = font,
+      footer_text = footer_text,
+      show_binary_value = show_binary_value,
+      raw_output = raw_output
     )
   } else {
-    rhs = .parse_formulae(df, ..., side="rhs")
+    rhs = .parse_formulae(df, ..., side = "rhs")
     first = rhs %>% purrr::map(~ rlang::as_label(.x[[1]]))
     interv = unique(unlist(first))
-    if (length(interv)>1) stop(
-      "The formulae input have multiple different first terms in the model. ",
-      "compare_outcomes() is expecting the same first term across all formulae ",
-      "representing the intervention, e.g. (out1 ~ int+cov1+cov2, out2 ~ int+cov1+cov2). ",
-      "Different covariates are ignored but the primary intervention must be the same. "
+    if (length(interv) > 1) {
+      stop(
+        "The formulae input have multiple different first terms in the model. ",
+        "compare_outcomes() is expecting the same first term across all formulae ",
+        "representing the intervention, e.g. (out1 ~ int+cov1+cov2, out2 ~ int+cov1+cov2). ",
+        "Different covariates are ignored but the primary intervention must be the same. "
+      )
+    }
+    outcomes = .parse_formulae(df, ..., side = "lhs")
+    if (any(sapply(outcomes, length) > 1)) {
+      stop(
+        "Some (or all of) the formulae input have more than one term on the left ",
+        "hand side. compare_outcomes() expects each formula to have a single outcome."
+      )
+    }
+    new_form = sprintf(
+      "~ %s + %s",
+      interv,
+      paste0(unlist(outcomes), collapse = " + ")
     )
-    outcomes = .parse_formulae(df, ..., side="lhs")
-    if (any(sapply(outcomes, length) > 1)) stop(
-      "Some (or all of) the formulae input have more than one term on the left ",
-      "hand side. compare_outcomes() expects each formula to have a single outcome."
-    )
-    new_form = sprintf("~ %s + %s", interv, paste0(unlist(outcomes),collapse = " + "))
     new_form = stats::as.formula(new_form)
-    compare_population(df, new_form, label_fn = label_fn, units = units,
-                       override_type = override_type, layout = layout, override_percent_dp = override_percent_dp,
-                       override_real_dp = override_real_dp, p_format = p_format, font_size = font_size,
-                       font = font, footer_text = footer_text, show_binary_value = show_binary_value,
-                       raw_output = raw_output
+    compare_population(
+      df,
+      new_form,
+      label_fn = label_fn,
+      units = units,
+      override_type = override_type,
+      layout = layout,
+      override_percent_dp = override_percent_dp,
+      override_real_dp = override_real_dp,
+      p_format = p_format,
+      font_size = font_size,
+      font = font,
+      footer_text = footer_text,
+      show_binary_value = show_binary_value,
+      raw_output = raw_output
     )
   }
 }
@@ -194,38 +228,51 @@ compare_outcomes = function(df,
 #' tmp = iris %>% dplyr::group_by(Species) %>% as_t1_signif(tidyselect::everything())
 #' tmp = diamonds %>% dplyr::group_by(is_colored) %>% as_t1_signif(tidyselect::everything())
 as_t1_signif = function(
-    df,
-    ...,
-    label_fn = label_extractor(df),
-    units = extract_units(df),
-    override_type = list(),
-    override_method = list()
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df),
+  override_type = list(),
+  override_method = list()
 ) {
   cols = .parse_vars(df, ...)
   if (.is_formula_interface(...)) {
     intervention = cols[[1]]
-    if (dplyr::is.grouped_df(df) && (df %>% dplyr::groups() != intervention))
-      warning("compare_missing(...) ignores grouping when using the formula interface.")
+    if (dplyr::is.grouped_df(df) && (df %>% dplyr::groups() != intervention)) {
+      warning(
+        "compare_missing(...) ignores grouping when using the formula interface."
+      )
+    }
     df = df %>% dplyr::group_by(!!intervention)
   } else {
     intervention = df %>% dplyr::groups()
-    if (length(intervention) == 0) stop("If using the tidyselect interface, `df` must be grouped by the intervention")
-    if (length(intervention) > 1) warning(
-      "there are multiple columns defined in the intervention group.\n",
-      "If you meant to do a nested comparison use a dplyr::group_modify().\n",
-      "Otherwise this is likely a mistake."
-    )
+    if (length(intervention) == 0) {
+      stop(
+        "If using the tidyselect interface, `df` must be grouped by the intervention"
+      )
+    }
+    if (length(intervention) > 1) {
+      warning(
+        "there are multiple columns defined in the intervention group.\n",
+        "If you meant to do a nested comparison use a dplyr::group_modify().\n",
+        "Otherwise this is likely a mistake."
+      )
+    }
     cols = cols %>% setdiff(intervention)
   }
-  label_fn = purrr::as_mapper(label_fn)
 
-  if (df %>% dplyr::n_groups() > getOption("huxtableone.max_comparisons",10)) {
-    stop("The number of groups being compared is ",df %>% dplyr::n_groups()," which is more than the maximum allowed by `options('huxtableone.max_comparisons'=...)`, which is currently ",getOption("huxtableone.max_comparisons",10))
+  if (df %>% dplyr::n_groups() > getOption("huxtableone.max_comparisons", 10)) {
+    stop(
+      "The number of groups being compared is ",
+      df %>% dplyr::n_groups(),
+      " which is more than the maximum allowed by `options('huxtableone.max_comparisons'=...)`, which is currently ",
+      getOption("huxtableone.max_comparisons", 10)
+    )
   }
 
-  shape = .get_shape(df,cols,label_fn,units)
-  summary = .summary_stats(shape,override_type = override_type)
-  sign = .significance_tests(summary,override_method = override_method)
+  shape = .get_shape(df, cols, label_fn, units)
+  summary = .summary_stats(shape, override_type = override_type)
+  sign = .significance_tests(summary, override_method = override_method)
   return(sign)
 }
 
@@ -272,15 +319,16 @@ as_t1_signif = function(
 #'   as_t1_signif(tidyselect::everything()) %>%
 #'   huxtable::as_huxtable()
 as_huxtable.t1_signif = function(
-    x, ...,
-    layout = "compact",
-    override_percent_dp = list(),
-    override_real_dp = list(),
-    p_format = names(.pvalue.defaults),
-    font_size = getOption("huxtableone.font_size",8),
-    font = getOption("huxtableone.font","Arial"),
-    footer_text = NULL,
-    show_binary_value = NULL
+  x,
+  ...,
+  layout = "compact",
+  override_percent_dp = list(),
+  override_real_dp = list(),
+  p_format = names(.pvalue.defaults),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  show_binary_value = NULL
 ) {
   p_format = match.arg(p_format)
   if (is.list(layout)) {
@@ -288,38 +336,53 @@ as_huxtable.t1_signif = function(
   } else {
     format = getOption("huxtableone.format_list", default.format[[layout]])
   }
-  fmt = .format_summary(x, format=format, override_percent_dp = override_percent_dp, override_real_dp=override_real_dp, show_binary_value=show_binary_value)
+  fmt = .format_summary(
+    x,
+    format = format,
+    override_percent_dp = override_percent_dp,
+    override_real_dp = override_real_dp,
+    show_binary_value = show_binary_value
+  )
 
   intervention = attr(x, "intervention")
 
-  p_col = as.symbol(getOption("huxtableone.pvalue_column_name","P value"))
-  variable_col = as.symbol(getOption("huxtableone.variable_column_name","Variable"))
-  characteristic_col = as.symbol(getOption("huxtableone.characteristic_column_name","Characteristic"))
-
+  p_col = as.symbol(getOption("huxtableone.pvalue_column_name", "P value"))
+  variable_col = as.symbol(getOption(
+    "huxtableone.variable_column_name",
+    "Variable"
+  ))
+  characteristic_col = as.symbol(getOption(
+    "huxtableone.characteristic_column_name",
+    "Characteristic"
+  ))
 
   fsign = x %>% .format_significance(p_format)
-  fmt = fmt %>% dplyr::left_join(fsign, by="variable")
+  fmt = fmt %>% dplyr::left_join(fsign, by = "variable")
 
-  fmt = fmt %>% dplyr::rename(
-    !!variable_col := variable,
-    !!characteristic_col := characteristic
-  )
+  fmt = fmt %>%
+    dplyr::rename(
+      !!variable_col := variable,
+      !!characteristic_col := characteristic
+    )
 
-  hux = fmt %>% .hux_tidy(
-    rowGroupVars = dplyr::vars(!!variable_col, !!p_col, !!characteristic_col),
-    colGroupVars = c(intervention, dplyr::sym(".tbl_col_name")),
-    defaultFontSize= font_size,
-    defaultFont = font,
-    displayRedundantColumnNames=FALSE
-  ) %>%
+  hux = fmt %>%
+    .hux_tidy(
+      rowGroupVars = dplyr::vars(!!variable_col, !!p_col, !!characteristic_col),
+      colGroupVars = c(intervention, dplyr::sym(".tbl_col_name")),
+      defaultFontSize = font_size,
+      defaultFont = font,
+      displayRedundantColumnNames = FALSE
+    ) %>%
     dplyr::relocate(2, .after = tidyselect::everything())
 
   tmp = get_footer_text(fsign)
 
   norm = NULL
-  if (any(x$.type == "continuous")) norm = .describe_normality_test()
+  if (any(x$.type == "continuous")) {
+    norm = .describe_normality_test()
+  }
 
-  method = getOption("huxtableone.show_pvalue_method",TRUE)
+  method = getOption("huxtableone.show_pvalue_method", TRUE)
   if (method) {
     footer = c(
       sprintf("%s", tmp$table_key),
@@ -334,19 +397,27 @@ as_huxtable.t1_signif = function(
     )
   }
 
-  signif_lvl = getOption("huxtableone.bonferroni_level",0.05)
+  signif_lvl = getOption("huxtableone.bonferroni_level", 0.05)
   if (!isFALSE(signif_lvl)) {
-    footer = c(footer,
-               sprintf("An adjusted %s of %1.3g may be considered significant.",
-                       rlang::as_label(p_col),
-                       signif_lvl/nrow(x))
+    footer = c(
+      footer,
+      sprintf(
+        "An adjusted %s of %1.3g may be considered significant.",
+        rlang::as_label(p_col),
+        signif_lvl / nrow(x)
+      )
     )
   }
 
-  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer", isFALSE(footer_text))) {
     hux = hux %>%
-      huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
-      huxtable::set_bottom_border(row=huxtable::final(),value=0)
+      huxtable::insert_row(
+        paste0(footer, collapse = "\n"),
+        after = nrow(hux),
+        colspan = ncol(hux),
+        fill = ""
+      ) %>%
+      huxtable::set_bottom_border(row = huxtable::final(), value = 0)
   }
   # hux = structure(hux, methods = get_footer_text(summary))
   return(hux)
@@ -431,65 +502,99 @@ as_huxtable.t1_signif = function(
 #'   group_comparison(variable = "cut", subgroup="Fair", no_summary=TRUE) %>%
 #'   dplyr::glimpse()
 group_comparison = function(
-    t1_signif,
-    variable = NULL,
-    subgroup = NULL,
-    intervention = NULL,
-    percent_fmt = "%1.1f%%",
-    p_format = names(.pvalue.defaults),
-    no_summary = FALSE,
-    summary_glue = NULL,
-    summary_arrange = NULL,
-    summary_sep = ", ",
-    summary_last = " versus ",
-    no_signif = FALSE,
-    signif_glue = NULL,
-    signif_sep = NULL,
-    signif_last = NULL
-  ) {
+  t1_signif,
+  variable = NULL,
+  subgroup = NULL,
+  intervention = NULL,
+  percent_fmt = "%1.1f%%",
+  p_format = names(.pvalue.defaults),
+  no_summary = FALSE,
+  summary_glue = NULL,
+  summary_arrange = NULL,
+  summary_sep = ", ",
+  summary_last = " versus ",
+  no_signif = FALSE,
+  signif_glue = NULL,
+  signif_sep = NULL,
+  signif_last = NULL
+) {
   tmp = t1_signif
   p_format = match.arg(p_format)
-  intervention_col = attr(tmp,"intervention")
+  intervention_col = attr(tmp, "intervention")
 
   if (!is.null(variable)) {
-    tmp = tmp %>% dplyr::filter(
-      .name %in% as.character(variable) | .label %in% as.character(variable)
-    )
+    tmp = tmp %>%
+      dplyr::filter(
+        .name %in% as.character(variable) | .label %in% as.character(variable)
+      )
   } else {
-    message("* `variable` can be any of:\n",
-            c(tmp %>% dplyr::pull(.name),tmp %>% dplyr::pull(.label)) %>% unique() %>% paste0("`",.,"`",collapse = ","))
+    message(
+      "* `variable` can be any of:\n",
+      c(tmp %>% dplyr::pull(.name), tmp %>% dplyr::pull(.label)) %>%
+        unique() %>%
+        paste0("`", ., "`", collapse = ",")
+    )
   }
 
   if (!is.null(subgroup)) {
     # this is a categorical data item
-    tmp = tmp %>% dplyr::mutate(
-      .summary_data = purrr::map(.summary_data, ~ .x %>%
-                                   dplyr::filter(level %in% subgroup))
-    )
+    tmp = tmp %>%
+      dplyr::mutate(
+        .summary_data = purrr::map(
+          .summary_data,
+          ~ .x %>%
+            dplyr::filter(level %in% subgroup)
+        )
+      )
   } else {
     subgs = tmp %>% dplyr::pull(.level_names) %>% purrr::list_c() %>% unique()
-    if (length(subgs) > 0)
-    message("* `subgroup` can be any of:\n",
-      subgs %>% paste0("`",.,"`",collapse = ",")
-    )
+    if (length(subgs) > 0) {
+      message(
+        "* `subgroup` can be any of:\n",
+        subgs %>% paste0("`", ., "`", collapse = ",")
+      )
+    }
   }
 
   if (!is.null(intervention)) {
-    if (length(intervention_col) == 0) stop("cannot filter on intervention when this is not defined.")
-    if (length(intervention_col) > 1) stop("cannot filter on intervention when this is over multiple columns.")
+    if (length(intervention_col) == 0) {
+      stop("cannot filter on intervention when this is not defined.")
+    }
+    if (length(intervention_col) > 1) {
+      stop("cannot filter on intervention when this is over multiple columns.")
+    }
     tmp_intervention_col = intervention_col[[1]]
-    tmp = tmp %>% dplyr::mutate(
-      .summary_data = purrr::map(.summary_data, ~ .x %>%
-                                   dplyr::filter(!!tmp_intervention_col %in% intervention))
-    )
+    tmp = tmp %>%
+      dplyr::mutate(
+        .summary_data = purrr::map(
+          .summary_data,
+          ~ .x %>%
+            dplyr::filter(!!tmp_intervention_col %in% intervention)
+        )
+      )
   } else {
-    message("* `intervention` can be any of:\n", attr(tmp,"intervention_levels") %>% dplyr::pull() %>% levels() %>% paste0("`",.,"`",collapse = ","))
+    message(
+      "* `intervention` can be any of:\n",
+      attr(tmp, "intervention_levels") %>%
+        dplyr::pull() %>%
+        levels() %>%
+        paste0("`", ., "`", collapse = ",")
+    )
   }
 
-  summarydf = tmp %>% dplyr::select(
-    variable = .label, unit = .unit, .summary_data, N_total, N_present
-  ) %>% tidyr::unnest(.summary_data) %>%
-    dplyr::mutate(dplyr::across(dplyr::starts_with("prob"), ~ .sprintf_no_na(percent_fmt, .x*100)))
+  summarydf = tmp %>%
+    dplyr::select(
+      variable = .label,
+      unit = .unit,
+      .summary_data,
+      N_total,
+      N_present
+    ) %>%
+    tidyr::unnest(.summary_data) %>%
+    dplyr::mutate(dplyr::across(
+      dplyr::starts_with("prob"),
+      ~ .sprintf_no_na(percent_fmt, .x * 100)
+    ))
 
   if ("level" %in% colnames(summarydf)) {
     summarydf = summarydf %>% dplyr::rename(subgroup = level)
@@ -497,10 +602,14 @@ group_comparison = function(
     summarydf = summarydf %>% dplyr::mutate(subgroup = NA_character_)
   }
 
-  if (nrow(summarydf) == 0) stop(sprintf(
-    "The combination of `intervention=%s`, `variable=%s` and `subgroup=%s` are not found in the data",
-    as.character(intervention %||% "<any>"), as.character(variable %||% "<any>"), as.character(subgroup %||% "<any>")
-  ))
+  if (nrow(summarydf) == 0) {
+    stop(sprintf(
+      "The combination of `intervention=%s`, `variable=%s` and `subgroup=%s` are not found in the data",
+      as.character(intervention %||% "<any>"),
+      as.character(variable %||% "<any>"),
+      as.character(subgroup %||% "<any>")
+    ))
+  }
 
   summary_arrange = rlang::enexpr(summary_arrange)
   if (!is.null(summary_arrange)) {
@@ -510,72 +619,85 @@ group_comparison = function(
   summarydf = summarydf %>%
     dplyr::group_by(variable, subgroup, !!!intervention_col)
 
-  no_signif = no_signif || (summarydf %>% dplyr::ungroup() %>%
-    dplyr::select(!!!intervention_col) %>% dplyr::distinct() %>% nrow() <= 1)
+  no_signif = no_signif ||
+    (summarydf %>%
+      dplyr::ungroup() %>%
+      dplyr::select(!!!intervention_col) %>%
+      dplyr::distinct() %>%
+      nrow() <=
+      1)
 
   if (!no_signif) {
-    fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
-    signifdf = tmp %>% dplyr::select(
-      variable = .label, .significance_test
-    ) %>%
+    fun = getOption(
+      "huxtableone.pvalue_formatter",
+      .pvalue.defaults[[p_format]]
+    )
+    signifdf = tmp %>%
+      dplyr::select(
+        variable = .label,
+        .significance_test
+      ) %>%
       tidyr::unnest(.significance_test) %>%
       dplyr::mutate(p.value = fun(p.value)) %>%
       dplyr::group_by(variable)
   } else {
     # in the case that the subgroups are being compared the signifance tests no
     # do not apply
-    signifdf = tmp %>% dplyr::select(
-      variable = .label
-    ) %>% dplyr::distinct()
+    signifdf = tmp %>%
+      dplyr::select(
+        variable = .label
+      ) %>%
+      dplyr::distinct()
   }
 
   if (!no_summary) {
     if (is.null(summary_glue)) {
-      message("* `summary_glue` can use any of the following variables:\n",
-            paste0("`",colnames(summarydf),"`",collapse = ", "))
+      message(
+        "* `summary_glue` can use any of the following variables:\n",
+        paste0("`", colnames(summarydf), "`", collapse = ", ")
+      )
       # if (nrow(summarydf) < 3) return(invisible(dplyr::glimpse(summarydf)))
       return(invisible(summarydf))
     }
 
-    summarytext = summarydf %>% dplyr::mutate(text = glue::glue(summary_glue)) %>%
+    summarytext = summarydf %>%
+      dplyr::mutate(text = glue::glue(summary_glue)) %>%
       dplyr::select(variable, subgroup, !!!intervention_col, text) %>%
       dplyr::group_by(variable, subgroup)
 
     if (!is.null(summary_sep)) {
       summarytext = summarytext %>%
-        dplyr::summarise(text =
-                glue::glue_collapse(text, sep=summary_sep, last = summary_last)
+        dplyr::summarise(
+          text = glue::glue_collapse(
+            text,
+            sep = summary_sep,
+            last = summary_last
+          )
         )
     }
-
   } else {
-
     summarytext = summarydf %>%
       dplyr::ungroup() %>%
       dplyr::select(variable) %>%
       dplyr::distinct() %>%
       dplyr::group_by(variable)
-
   }
 
-
-
-
-
   if (no_signif) {
-
     return(
-      summarytext$text %>% glue::glue_collapse(sep=summary_sep, last = summary_last) %>% as.character()
+      summarytext$text %>%
+        glue::glue_collapse(sep = summary_sep, last = summary_last) %>%
+        as.character()
     )
-
   } else {
-
     # incorporate significance
-    summarytext = summarytext %>% dplyr::left_join(signifdf, by="variable")
+    summarytext = summarytext %>% dplyr::left_join(signifdf, by = "variable")
 
     if (is.null(signif_glue)) {
-      message("* `signif_glue` can use any of the following variables:\n",
-              paste0("`",colnames(summarytext),"`",collapse = ", "))
+      message(
+        "* `signif_glue` can use any of the following variables:\n",
+        paste0("`", colnames(summarytext), "`", collapse = ", ")
+      )
       return(invisible(summarytext))
     }
 
@@ -584,7 +706,7 @@ group_comparison = function(
 
     if (!is.null(signif_sep)) {
       signiftext = signiftext %>%
-        glue::glue_collapse(sep=summary_sep, last = summary_last)
+        glue::glue_collapse(sep = summary_sep, last = summary_last)
     }
 
     return(signiftext)
@@ -592,40 +714,61 @@ group_comparison = function(
 }
 
 
-
 ## Helpers ----
 
 # df_signif = df_shape %>% .significance_tests()
 # df_signif %>% .format_significance()
-.format_significance = function(df_signif, p_format = names(.pvalue.defaults), method = getOption("huxtableone.show_pvalue_method",TRUE)) {
+.format_significance = function(
+  df_signif,
+  p_format = names(.pvalue.defaults),
+  method = getOption("huxtableone.show_pvalue_method", TRUE)
+) {
   p_format = match.arg(p_format)
-  p_col = as.symbol(getOption("huxtableone.pvalue_column_name","P value"))
+  p_col = as.symbol(getOption("huxtableone.pvalue_column_name", "P value"))
 
-  fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
+  fun = getOption("huxtableone.pvalue_formatter", .pvalue.defaults[[p_format]])
 
-  tmp = df_signif %>% dplyr::select(variable = .label, .type, .significance_test) %>%
+  tmp = df_signif %>%
+    dplyr::select(variable = .label, .type, .significance_test) %>%
     tidyr::unnest(.significance_test)
 
-  methods = tmp %>% dplyr::select(.type,p.method) %>% dplyr::distinct()
-  methods_description = methods %>% dplyr::group_by(.type) %>%
-    dplyr::summarise(.methods = paste0(p.method,collapse = ", ")) %>%
-    dplyr::summarise(t = paste0(sprintf("%s (%s variables)",.methods,.type), collapse=" or ")) %>%
+  methods = tmp %>% dplyr::select(.type, p.method) %>% dplyr::distinct()
+  methods_description = methods %>%
+    dplyr::group_by(.type) %>%
+    dplyr::summarise(.methods = paste0(p.method, collapse = ", ")) %>%
+    dplyr::summarise(
+      t = paste0(
+        sprintf("%s (%s variables)", .methods, .type),
+        collapse = " or "
+      )
+    ) %>%
     dplyr::pull(t)
   if (method) {
     # TODO: don;t really want to account for .type when p.method is "Not
     # calculated due to missing values"
-    methods = methods %>% dplyr::mutate(daggers = lapply(1:nrow(methods), rep_len, x="\u2020") %>% lapply(paste0, collapse="") %>% unlist())
-    tmp = tmp %>% dplyr::left_join(methods, by=c("p.method",".type")) %>%
-      dplyr::mutate(!!p_col := paste0(fun(p.value)," ",daggers))
+    methods = methods %>%
+      dplyr::mutate(
+        daggers = lapply(1:nrow(methods), rep_len, x = "\u2020") %>%
+          lapply(paste0, collapse = "") %>%
+          unlist()
+      )
+    tmp = tmp %>%
+      dplyr::left_join(methods, by = c("p.method", ".type")) %>%
+      dplyr::mutate(!!p_col := paste0(fun(p.value), " ", daggers))
 
-    methods_key = paste0(sprintf("%s, %s (%s)",methods$daggers,methods$p.method, methods$.type), collapse = "; ")
-    tmp = structure(tmp %>% dplyr::select(variable, !!p_col),
-                    methods = c(list(
-                      table_key = methods_key,
-                      significance_test = methods_description
-                    ),
-                    get_footer_text(df_signif))
-
+    methods_key = paste0(
+      sprintf("%s, %s (%s)", methods$daggers, methods$p.method, methods$.type),
+      collapse = "; "
+    )
+    tmp = structure(
+      tmp %>% dplyr::select(variable, !!p_col),
+      methods = c(
+        list(
+          table_key = methods_key,
+          significance_test = methods_description
+        ),
+        get_footer_text(df_signif)
+      )
     )
   } else {
     tmp = tmp %>%
@@ -634,9 +777,12 @@ group_comparison = function(
       )
     tmp = structure(
       tmp %>% dplyr::select(variable, !!p_col),
-      methods = c(list(
-        significance_test = methods_description
-      ), get_footer_text(df_signif))
+      methods = c(
+        list(
+          significance_test = methods_description
+        ),
+        get_footer_text(df_signif)
+      )
     )
   }
 

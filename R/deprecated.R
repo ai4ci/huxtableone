@@ -7,11 +7,14 @@
   function(.variable, .characteristic = NULL) {
     .summary_data = NULL
     .variable = rlang::ensym(.variable)
-    tmp = sign %>% dplyr::filter(.name==rlang::as_label(.variable))
-    tmp2 = tmp %>% dplyr::select(.summary_type, .summary_data) %>%
+    tmp = sign %>% dplyr::filter(.name == rlang::as_label(.variable))
+    tmp2 = tmp %>%
+      dplyr::select(.summary_type, .summary_data) %>%
       tidyr::unnest(.summary_data) %>%
       dplyr::mutate(.group = as.character(!!intervention))
-    if (!is.null(.characteristic)) tmp2 = tmp2 %>% dplyr::filter(level == .characteristic)
+    if (!is.null(.characteristic)) {
+      tmp2 = tmp2 %>% dplyr::filter(level == .characteristic)
+    }
     simple = list(
       # "subtype_count" = "{.sprintf_na('%1.1f%% %s (%d/%d - %s)',prob.0.5*100,as.character(level),n,N,.group)}",
       "subtype_count" = "{.sprintf_na('%1.1f%% (%s) [N=%d],prob.0.5*100,.group,n)}",
@@ -25,13 +28,15 @@
       out[[i]] = glue::glue_data(l, glue)
     }
     s = out %>% glue::glue_collapse(sep = ", ", last = " and ")
-    p = tmp %>% dplyr::select(.significance_test) %>% tidyr::unnest(.significance_test) %>%
-      dplyr::pull(p.value) %>% p_fun()
+    p = tmp %>%
+      dplyr::select(.significance_test) %>%
+      tidyr::unnest(.significance_test) %>%
+      dplyr::pull(p.value) %>%
+      p_fun()
     # q = tmp %>% dplyr::select(.significance_test) %>% tidyr::unnest(.significance_test) %>%
     #   dplyr::pull(p.method)
-    p_col = getOption("huxtableone.pvalue_column_name","P value")
-    return(sprintf("%s [%s: %s]",s,p_col,p))
-
+    p_col = getOption("huxtableone.pvalue_column_name", "P value")
+    return(sprintf("%s [%s: %s]", s, p_col, p))
   }
 }
 
@@ -45,15 +50,24 @@
   get_comparison = .comparison_filter(sign)
 
   function(.variable, .intervention = NULL, .characteristic = NULL) {
-
-    summary = get_summary(.variable,.intervention,.characteristic)
+    summary = get_summary(.variable, .intervention, .characteristic)
     comparison = get_comparison(.variable)
-    return(summary %>% dplyr::left_join(
-      comparison %>% dplyr::select(-.label, -.order, -.unit, -.type, -N_total, -N_present),
-      by = ".name",
-      suffix = c("",".signif")
-    ))
-
+    return(
+      summary %>%
+        dplyr::left_join(
+          comparison %>%
+            dplyr::select(
+              -.label,
+              -.order,
+              -.unit,
+              -.type,
+              -N_total,
+              -N_present
+            ),
+          by = ".name",
+          suffix = c("", ".signif")
+        )
+    )
   }
 }
 
@@ -63,14 +77,28 @@
   function(.variable, .intervention = NULL, .characteristic = NULL) {
     .summary_data = NULL
     .variable = rlang::ensym(.variable)
-    tmp = sign %>% dplyr::filter(.cols==.variable)
-    tmp2 = tmp %>% dplyr::select(.name, .label, .order, .unit, .type, N_total, N_present, .summary_data) %>%
+    tmp = sign %>% dplyr::filter(.cols == .variable)
+    tmp2 = tmp %>%
+      dplyr::select(
+        .name,
+        .label,
+        .order,
+        .unit,
+        .type,
+        N_total,
+        N_present,
+        .summary_data
+      ) %>%
       tidyr::unnest(.summary_data) %>%
       dplyr::mutate(
         .group = as.character(!!intervention)
       )
-    if (!is.null(.intervention)) tmp2 = tmp2 %>% dplyr::filter(.group == .intervention)
-    if (!is.null(.characteristic)) tmp2 = tmp2 %>% dplyr::filter(level == .characteristic)
+    if (!is.null(.intervention)) {
+      tmp2 = tmp2 %>% dplyr::filter(.group == .intervention)
+    }
+    if (!is.null(.characteristic)) {
+      tmp2 = tmp2 %>% dplyr::filter(level == .characteristic)
+    }
     return(tmp2)
   }
 }
@@ -79,11 +107,24 @@
   function(.variable) {
     .summary_data = NULL
     .variable = rlang::ensym(.variable)
-    tmp = sign %>% dplyr::filter(.cols==.variable)
-    p = tmp %>% dplyr::select(.name, .label, .order, .unit, .type, N_total, N_present, .significance_test) %>% tidyr::unnest(.significance_test)
+    tmp = sign %>% dplyr::filter(.cols == .variable)
+    p = tmp %>%
+      dplyr::select(
+        .name,
+        .label,
+        .order,
+        .unit,
+        .type,
+        N_total,
+        N_present,
+        .significance_test
+      ) %>%
+      tidyr::unnest(.significance_test)
     if (".power_analysis" %in% colnames(tmp)) {
-      a = tmp %>% dplyr::select(.name,.power_analysis) %>% tidyr::unnest(.power_analysis)
-      return(p %>% dplyr::left_join(a, by=".name", suffix=c("","power")))
+      a = tmp %>%
+        dplyr::select(.name, .power_analysis) %>%
+        tidyr::unnest(.power_analysis)
+      return(p %>% dplyr::left_join(a, by = ".name", suffix = c("", "power")))
     } else {
       return(p)
     }
@@ -137,22 +178,25 @@
 #'   combinations.
 #' @export
 extract_comparison = function(
-    df,
-    ...,
-    label_fn = label_extractor(df),
-    override_type = list(),
-    p_format = names(.pvalue.defaults),
-    override_method = list(),
-    power_analysis = FALSE,
-    override_power = list(),
-    raw_output = FALSE
+  df,
+  ...,
+  label_fn = NULL,
+  override_type = list(),
+  p_format = names(.pvalue.defaults),
+  override_method = list(),
+  power_analysis = FALSE,
+  override_power = list(),
+  raw_output = FALSE
 ) {
-
-  rlang::warn("extract_comparison is deprecated and wil be removed in future versions of huxtableone",
-              .frequency = "once",.frequency_id = "dep_ext_comp")
+  rlang::warn(
+    "extract_comparison is deprecated and wil be removed in future versions of huxtableone",
+    .frequency = "once",
+    .frequency_id = "dep_ext_comp"
+  )
 
   sign = as_t1_signif(
-    df, ...,
+    df,
+    ...,
     label_fn = label_fn,
     units = units,
     override_type = override_type,
@@ -161,10 +205,15 @@ extract_comparison = function(
   if (power_analysis) {
     sign = .power_analysis(sign, override_power = override_power)
   }
-  if (raw_output) return(sign)
+  if (raw_output) {
+    return(sign)
+  }
 
   p_format = match.arg(p_format)
-  p_fun = getOption("huxtableone.pvalue_formatter",.pvalue.defaults[[p_format]])
+  p_fun = getOption(
+    "huxtableone.pvalue_formatter",
+    .pvalue.defaults[[p_format]]
+  )
   return(list(
     compare = .comparison_printer(sign, intervention, p_fun),
     filter = .data_filter(sign, intervention),
@@ -172,4 +221,3 @@ extract_comparison = function(
     signif_tests = .comparison_filter(sign)
   ))
 }
-

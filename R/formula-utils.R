@@ -180,7 +180,7 @@ as_vars = .as_vars
 }
 
 # where dots is either a function (in which case we only want rhs) or a tidyselect.
-# .is_formula_interface(~ Species + Petal.Width + Missing)
+# testthat::expect_equal(.is_formula_interface(~ Species + Petal.Width + Missing), TRUE)
 # .is_formula_interface(~ Species + Petal.Width + Missing, a ~ b+c)
 # .is_formula_interface(c(~ Species + Petal.Width + Missing, a ~ b+c))
 # .is_formula_interface(list(~ Species + Petal.Width + Missing, a ~ b+c))

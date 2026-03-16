@@ -1,5 +1,3 @@
-
-
 #' Group data count and calculate proportions by column.
 #'
 #' @param df a dataframe of linelist items
@@ -17,43 +15,68 @@
 #'
 #' @examples
 #' diamonds %>% count_table(dplyr::vars(cut,clarity), dplyr::vars(color), subgroupLevel = 1)
-count_table = function(df, rowGroupVars, colGroupVars,
+count_table = function(
+  df,
+  rowGroupVars,
+  colGroupVars,
 
-                       numExpr = dplyr::n(), denomExpr = dplyr::n(), totalExpr = dplyr::n(),
-                       subgroupLevel = length(rowGroupVars),
-                       glue = list(
-                        # 'Count (N={sprintf("%d",n)})' = '{sprintf("%d", x)}',
-                        # 'Proportion [95% CI]' = '{sprintf("%1.1f%% [%1.1f \u2014 %1.1f]", mean*100, lower*100, upper*100)}'
-                        'Count [%] (N={sprintf("%d",N)})' = '{sprintf("%d/%d [%1.1f%%]", x, n, mean*100)}'
-                      ),
-                      label_fn = label_extractor(df),
-                      font_size = getOption("huxtableone.font_size",8),
-                      font = getOption("huxtableone.font","Arial")
+  numExpr = dplyr::n(),
+  denomExpr = dplyr::n(),
+  totalExpr = dplyr::n(),
+  subgroupLevel = length(rowGroupVars),
+  glue = list(
+    # 'Count (N={sprintf("%d",n)})' = '{sprintf("%d", x)}',
+    # 'Proportion [95% CI]' = '{sprintf("%1.1f%% [%1.1f \u2014 %1.1f]", mean*100, lower*100, upper*100)}'
+    'Count [%] (N={sprintf("%d",N)})' = '{sprintf("%d/%d [%1.1f%%]", x, n, mean*100)}'
+  ),
+  label_fn = NULL,
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font()
 ) {
-
-  label_fn = getOption("huxtableone.labeller",label_fn)
+  if (is.null(label_fn)) {
+    label_fn = getOption("huxtableone.labeller", label_extractor(df))
+  }
   label_fn = purrr::as_mapper(label_fn)
 
-  rowGroupVars2 = label_fn(sapply(rowGroupVars, rlang::as_label)) %>% lapply(as.symbol)
-  colGroupVars2 = label_fn(sapply(colGroupVars, rlang::as_label)) %>% lapply(as.symbol)
+  rowGroupVars2 = label_fn(sapply(rowGroupVars, rlang::as_label)) %>%
+    lapply(as.symbol)
+  colGroupVars2 = label_fn(sapply(colGroupVars, rlang::as_label)) %>%
+    lapply(as.symbol)
 
   .count_data(
-    df, rowGroupVars, colGroupVars, label_fn, {{numExpr}}, {{denomExpr}}, {{totalExpr}}, subgroupLevel, glue
+    df,
+    rowGroupVars,
+    colGroupVars,
+    label_fn,
+    {{ numExpr }},
+    {{ denomExpr }},
+    {{ totalExpr }},
+    subgroupLevel,
+    glue
   ) %>%
-  .hux_tidy(
-    rowGroupVars = rowGroupVars2,
-    colGroupVars = c(colGroupVars2,as.symbol("tag")),
-    defaultFontSize= font_size,
-    defaultFont = font)
-
+    .hux_tidy(
+      rowGroupVars = rowGroupVars2,
+      colGroupVars = c(colGroupVars2, as.symbol("tag")),
+      defaultFontSize = font_size,
+      defaultFont = font
+    )
 }
 
-.count_data = function(df, rowGroupVars, colGroupVars, label_fn, numExpr = dplyr::n(), denomExpr = dplyr::n(), totalExpr = dplyr::n(), subgroupLevel = length(rowGroupVars), glue = list(
-  # 'Count (N={sprintf("%d",n)})' = '{sprintf("%d", x)}',
-  # 'Proportion [95% CI]' = '{sprintf("%1.1f%% [%1.1f \u2014 %1.1f]", mean*100, lower*100, upper*100)}'
-  'Count [%] (N={sprintf("%d",N)})' = '{sprintf("%d/%d [%1.1f%%]", x, n, mean*100)}'
-)) {
-
+.count_data = function(
+  df,
+  rowGroupVars,
+  colGroupVars,
+  label_fn,
+  numExpr = dplyr::n(),
+  denomExpr = dplyr::n(),
+  totalExpr = dplyr::n(),
+  subgroupLevel = length(rowGroupVars),
+  glue = list(
+    # 'Count (N={sprintf("%d",n)})' = '{sprintf("%d", x)}',
+    # 'Proportion [95% CI]' = '{sprintf("%1.1f%% [%1.1f \u2014 %1.1f]", mean*100, lower*100, upper*100)}'
+    'Count [%] (N={sprintf("%d",N)})' = '{sprintf("%d/%d [%1.1f%%]", x, n, mean*100)}'
+  )
+) {
   numExpr = rlang::enexpr(numExpr)
   denomExpr = rlang::enexpr(denomExpr)
   totalExpr = rlang::enexpr(totalExpr)
@@ -64,23 +87,27 @@ count_table = function(df, rowGroupVars, colGroupVars,
   # (i.e. by column) for calculating confidence intervals.
 
   tmp = df %>%
-    dplyr::group_by(!!!colGroupVars,!!!rowGroupVars) %>%
+    dplyr::group_by(!!!colGroupVars, !!!rowGroupVars) %>%
     dplyr::mutate(x = !!numExpr) %>%
-    dplyr::group_by(!!!colGroupVars, !!!utils::head(rowGroupVars,-subgroupLevel)) %>%
+    dplyr::group_by(
+      !!!colGroupVars,
+      !!!utils::head(rowGroupVars, -subgroupLevel)
+    ) %>%
     dplyr::mutate(n = !!denomExpr) %>%
     dplyr::group_by(!!!colGroupVars) %>%
     dplyr::mutate(N = !!totalExpr) %>%
     dplyr::ungroup() %>%
     dplyr::select(!!!rowGroupVars, !!!colGroupVars, x, n, N) %>%
     dplyr::distinct() %>%
-    dplyr::mutate(binom::binom.confint(x,n,method="wilson"))
+    dplyr::mutate(binom::binom.confint(x, n, method = "wilson"))
 
   tmp3 = tibble::tibble()
   for (colSpec in names(glue)) {
-    tmp2 = tmp %>% dplyr::mutate(
-      tag = glue::glue(colSpec),
-      value = glue::glue(glue[[colSpec]])
-    )
+    tmp2 = tmp %>%
+      dplyr::mutate(
+        tag = glue::glue(colSpec),
+        value = glue::glue(glue[[colSpec]])
+      )
     tmp3 = tmp3 %>% dplyr::bind_rows(tmp2)
   }
 

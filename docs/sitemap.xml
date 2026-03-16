@@ -26,6 +26,8 @@
 <url><loc>https://ai4ci.github.io/huxtableone/reference/describe_data.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/describe_population.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/diamonds.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-find_namespace.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-get_fn_name.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_bind_rows.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_default_layout.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_insert_start.html</loc></url>
@@ -35,6 +37,8 @@
 <url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_set_footer.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_substitute_fonts.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/dot-hux_tidy.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-lax_as_function.html</loc></url>
+<url><loc>https://ai4ci.github.io/huxtableone/reference/dot-search_call_stack.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/explicit_na.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/extract_comparison.html</loc></url>
 <url><loc>https://ai4ci.github.io/huxtableone/reference/extract_units.html</loc></url>

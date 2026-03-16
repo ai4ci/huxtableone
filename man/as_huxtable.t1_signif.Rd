@@ -12,7 +12,7 @@
   override_real_dp = list(),
   p_format = names(.pvalue.defaults),
   font_size = getOption("huxtableone.font_size", 8),
-  font = getOption("huxtableone.font", "Arial"),
+  font = .default_font(),
   footer_text = NULL,
   show_binary_value = NULL
 )

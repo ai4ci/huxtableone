@@ -19,29 +19,28 @@
 #' diamonds %>% dplyr::group_by(is_colored) %>% describe_data(tidyselect::everything())
 #'
 describe_data = function(
-    df,
-    ...,
-    label_fn = label_extractor(df),
-    units = extract_units(df),
-    layout = "single",
-    font_size = getOption("huxtableone.font_size",8),
-    font = getOption("huxtableone.font","Arial"),
-    footer_text = NULL,
-    raw_output = FALSE
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df),
+  layout = "single",
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  raw_output = FALSE
 ) {
-  shape = as_t1_shape(df, ...,
-                          label_fn = label_fn,
-                          units=units
-  )
+  shape = as_t1_shape(df, ..., label_fn = label_fn, units = units)
 
-  if (raw_output) return(shape)
+  if (raw_output) {
+    return(shape)
+  }
 
-  shape %>% as_huxtable.t1_shape(
-    font_size = font_size,
-    font = font,
-    footer_text = footer_text
-  )
-
+  shape %>%
+    as_huxtable.t1_shape(
+      font_size = font_size,
+      font = font,
+      footer_text = footer_text
+    )
 }
 
 
@@ -81,15 +80,13 @@ describe_data = function(
 #'   tidyselect::everything()
 #' )
 as_t1_shape = function(
-    df,
-    ...,
-    label_fn = label_extractor(df),
-    units = extract_units(df)
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df)
 ) {
-
   cols = .parse_vars(df, ...)
-  label_fn = purrr::as_mapper(label_fn)
-  shape = .get_shape(df,cols,label_fn,units)
+  shape = .get_shape(df, cols, label_fn, units)
   return(shape)
 }
 
@@ -104,13 +101,13 @@ as_t1_shape = function(
 #' @return a formatted table as a `huxtable`
 #' @export
 as_huxtable.t1_shape = function(
-    x,
-    ...,
-    # layout = "single",
-    font_size = getOption("huxtableone.font_size",8),
-    font = getOption("huxtableone.font","Arial"),
-    footer_text = NULL,
-    show_binary_value=NULL
+  x,
+  ...,
+  # layout = "single",
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  show_binary_value = NULL
 ) {
   # if (is.list(layout)) {
   #   format = layout
@@ -120,19 +117,25 @@ as_huxtable.t1_shape = function(
 
   grps = x %>% dplyr::groups()
 
-  variable_col = as.symbol(getOption("huxtableone.variable_column_name","Variable"))
+  variable_col = as.symbol(getOption(
+    "huxtableone.variable_column_name",
+    "Variable"
+  ))
   fmt = .format_shape(x) #, format=format)
 
-  fmt = fmt %>% dplyr::rename(
-    !!variable_col := variable
-  )
+  fmt = fmt %>%
+    dplyr::rename(
+      !!variable_col := variable
+    )
 
-  hux = fmt %>% .hux_tidy(
-    rowGroupVars = dplyr::vars(!!variable_col, `Values / Units`),
-    colGroupVars = dplyr::vars(),
-    defaultFontSize= font_size,
-    defaultFont = font,
-    displayRedundantColumnNames=FALSE)
+  hux = fmt %>%
+    .hux_tidy(
+      rowGroupVars = dplyr::vars(!!variable_col, `Values / Units`),
+      colGroupVars = dplyr::vars(),
+      defaultFontSize = font_size,
+      defaultFont = font,
+      displayRedundantColumnNames = FALSE
+    )
 
   tmp = get_footer_text(x)
   footer = footer_text
@@ -142,33 +145,40 @@ as_huxtable.t1_shape = function(
       footer
     )
   }
-  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer", isFALSE(footer_text))) {
     hux = hux %>%
-      huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
-      huxtable::set_bottom_border(row=huxtable::final(),value=0)
+      huxtable::insert_row(
+        paste0(footer, collapse = "\n"),
+        after = nrow(hux),
+        colspan = ncol(hux),
+        fill = ""
+      ) %>%
+      huxtable::set_bottom_border(row = huxtable::final(), value = 0)
   }
   return(hux)
 }
 
 
-
-
-.format_shape = function(df_shape) { #, format) {
+.format_shape = function(df_shape) {
+  #, format) {
   # df_shape %>%
-  df_shape %>% dplyr::transmute(
-    variable = .label,
-    `Values / Units` = .maybe(dplyr::if_else(
-      is.na(.levels),
-      .unit,
-      purrr::map_chr(.level_names, ~ glue::glue_collapse(.x %||% "", sep = ", ", last=" or "))
-    )),
-    `Type` = .type,
-    `Normally distributed` = .is_normal,
-    `Unique (%)` = sprintf("%1.1f%%", (1-.p_ties)*100),
-    `Missing (%)` = sprintf("%1.1f%%", .p_missing*100),
-    `Default summary` = .summary_type,
-    `Comparable groups (n)` = .comparisons,
-    `Default test` = .comparison_method,
-  )
-
+  df_shape %>%
+    dplyr::transmute(
+      variable = .label,
+      `Values / Units` = .maybe(dplyr::if_else(
+        is.na(.levels),
+        .unit,
+        purrr::map_chr(
+          .level_names,
+          ~ glue::glue_collapse(.x %||% "", sep = ", ", last = " or ")
+        )
+      )),
+      `Type` = .type,
+      `Normally distributed` = .is_normal,
+      `Unique (%)` = sprintf("%1.1f%%", (1 - .p_ties) * 100),
+      `Missing (%)` = sprintf("%1.1f%%", .p_missing * 100),
+      `Default summary` = .summary_type,
+      `Comparable groups (n)` = .comparisons,
+      `Default test` = .comparison_method,
+    )
 }

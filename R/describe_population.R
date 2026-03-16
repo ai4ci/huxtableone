@@ -48,38 +48,42 @@
 #'   )
 #' options(old)
 describe_population = function(
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df),
+  override_type = list(),
+  layout = "single",
+  override_percent_dp = list(),
+  override_real_dp = list(),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  show_binary_value = NULL,
+  raw_output = FALSE
+) {
+  summary = as_t1_summary(
     df,
     ...,
-    label_fn = label_extractor(df),
-    units = extract_units(df),
-    override_type = list(),
-    layout = "single",
-    override_percent_dp = list(),
-    override_real_dp = list(),
-    font_size = getOption("huxtableone.font_size",8),
-    font = getOption("huxtableone.font","Arial"),
-    footer_text = NULL,
-    show_binary_value=NULL,
-    raw_output = FALSE
-) {
-  summary = as_t1_summary(df, ...,
-                          label_fn = label_fn,
-                          units=units,
-                          override_type = override_type
+    label_fn = label_fn,
+    units = units,
+    override_type = override_type
   )
 
-  if (raw_output) return(summary)
+  if (raw_output) {
+    return(summary)
+  }
 
-  summary %>% as_huxtable.t1_summary(
-    layout = layout,
-    override_percent_dp = override_percent_dp,
-    override_real_dp = override_real_dp,
-    font_size = font_size,
-    font = font,
-    footer_text = footer_text,
-    show_binary_value=show_binary_value,
-  )
-
+  summary %>%
+    as_huxtable.t1_summary(
+      layout = layout,
+      override_percent_dp = override_percent_dp,
+      override_real_dp = override_real_dp,
+      font_size = font_size,
+      font = font,
+      footer_text = footer_text,
+      show_binary_value = show_binary_value,
+    )
 }
 
 
@@ -133,17 +137,15 @@ describe_population = function(
 #' )
 #'
 as_t1_summary = function(
-    df,
-    ...,
-    label_fn = label_extractor(df),
-    units = extract_units(df),
-    #TODO: implement override_type the same way as units have been done
-    override_type = list()
+  df,
+  ...,
+  label_fn = NULL,
+  units = extract_units(df),
+  #TODO: implement override_type the same way as units have been done
+  override_type = list()
 ) {
-
   cols = .parse_vars(df, ...)
-  label_fn = purrr::as_mapper(label_fn)
-  shape = .get_shape(df,cols,label_fn,units)
+  shape = .get_shape(df, cols, label_fn, units)
   summary = .summary_stats(shape, override_type)
   return(summary)
 }
@@ -159,15 +161,15 @@ as_t1_summary = function(
 #' @return a formatted table as a `huxtable`
 #' @export
 as_huxtable.t1_summary = function(
-    x,
-    ...,
-    layout = "single",
-    override_percent_dp = list(),
-    override_real_dp = list(),
-    font_size = getOption("huxtableone.font_size",8),
-    font = getOption("huxtableone.font","Arial"),
-    footer_text = NULL,
-    show_binary_value=NULL
+  x,
+  ...,
+  layout = "single",
+  override_percent_dp = list(),
+  override_real_dp = list(),
+  font_size = getOption("huxtableone.font_size", 8),
+  font = .default_font(),
+  footer_text = NULL,
+  show_binary_value = NULL
 ) {
   if (is.list(layout)) {
     format = layout
@@ -177,21 +179,36 @@ as_huxtable.t1_summary = function(
 
   grps = x %>% dplyr::groups()
 
-  variable_col = as.symbol(getOption("huxtableone.variable_column_name","Variable"))
-  characteristic_col = as.symbol(getOption("huxtableone.characteristic_column_name","Characteristic"))
-  fmt = .format_summary(x, format=format, override_percent_dp = override_percent_dp, override_real_dp=override_real_dp, show_binary_value=show_binary_value)
-
-  fmt = fmt %>% dplyr::rename(
-    !!variable_col := variable,
-    !!characteristic_col := characteristic
+  variable_col = as.symbol(getOption(
+    "huxtableone.variable_column_name",
+    "Variable"
+  ))
+  characteristic_col = as.symbol(getOption(
+    "huxtableone.characteristic_column_name",
+    "Characteristic"
+  ))
+  fmt = .format_summary(
+    x,
+    format = format,
+    override_percent_dp = override_percent_dp,
+    override_real_dp = override_real_dp,
+    show_binary_value = show_binary_value
   )
 
-  hux = fmt %>% .hux_tidy(
-    rowGroupVars = dplyr::vars(!!variable_col, !!characteristic_col),
-    colGroupVars = dplyr::vars(!!!grps,.tbl_col_name),
-    defaultFontSize= font_size,
-    defaultFont = font,
-    displayRedundantColumnNames=FALSE)
+  fmt = fmt %>%
+    dplyr::rename(
+      !!variable_col := variable,
+      !!characteristic_col := characteristic
+    )
+
+  hux = fmt %>%
+    .hux_tidy(
+      rowGroupVars = dplyr::vars(!!variable_col, !!characteristic_col),
+      colGroupVars = dplyr::vars(!!!grps, .tbl_col_name),
+      defaultFontSize = font_size,
+      defaultFont = font,
+      displayRedundantColumnNames = FALSE
+    )
 
   tmp = get_footer_text(x)
   footer = footer_text
@@ -201,10 +218,15 @@ as_huxtable.t1_summary = function(
       footer
     )
   }
-  if (!getOption("huxtableone.hide_footer",isFALSE(footer_text))) {
+  if (!getOption("huxtableone.hide_footer", isFALSE(footer_text))) {
     hux = hux %>%
-      huxtable::insert_row(paste0(footer,collapse="\n"), after=nrow(hux), colspan = ncol(hux), fill="") %>%
-      huxtable::set_bottom_border(row=huxtable::final(),value=0)
+      huxtable::insert_row(
+        paste0(footer, collapse = "\n"),
+        after = nrow(hux),
+        colspan = ncol(hux),
+        fill = ""
+      ) %>%
+      huxtable::set_bottom_border(row = huxtable::final(), value = 0)
   }
   return(hux)
 }
@@ -215,15 +237,21 @@ as_huxtable.t1_summary = function(
 # df_shape = diamonds %>%  dplyr::mutate(is_clear = ifelse(clarity>"VS2","clear","less clear")) %>% dplyr::group_by(is_clear) %>% .get_shape()
 # df_summary = df_shape %>% .summary_stats()
 # df_summary %>% .format_summary()
-.format_summary = function(df_summary, format, override_percent_dp = list(), override_real_dp = list(), show_binary_value=NULL ) {
-
+.format_summary = function(
+  df_summary,
+  format,
+  override_percent_dp = list(),
+  override_real_dp = list(),
+  show_binary_value = NULL
+) {
   override_percent_dp = as.list(override_percent_dp)
   override_real_dp = as.list(override_real_dp)
 
   if (!".glue" %in% colnames(df_summary)) {
-    df_summary = df_summary %>% dplyr::mutate(
-      .glue = format[.summary_type]
-    )
+    df_summary = df_summary %>%
+      dplyr::mutate(
+        .glue = format[.summary_type]
+      )
   }
 
   # Override decimal points
@@ -232,8 +260,8 @@ as_huxtable.t1_summary = function(
       .name = names(override_percent_dp),
       .percent_dp = unlist(override_percent_dp)
     )
-    jc = if(is.null(names(override_percent_dp))) character() else ".name"
-    df_summary = df_summary %>% dplyr::left_join(override, by=jc)
+    jc = if (is.null(names(override_percent_dp))) character() else ".name"
+    df_summary = df_summary %>% dplyr::left_join(override, by = jc)
   } else {
     df_summary = df_summary %>% dplyr::mutate(.percent_dp = NA)
   }
@@ -243,8 +271,8 @@ as_huxtable.t1_summary = function(
       .name = names(override_real_dp),
       .real_dp = unlist(override_real_dp)
     )
-    jc = if(is.null(names(override_real_dp))) character() else ".name"
-    df_summary = df_summary %>% dplyr::left_join(override, by=jc)
+    jc = if (is.null(names(override_real_dp))) character() else ".name"
+    df_summary = df_summary %>% dplyr::left_join(override, by = jc)
   } else {
     df_summary = df_summary %>% dplyr::mutate(.real_dp = NA)
   }
@@ -252,14 +280,18 @@ as_huxtable.t1_summary = function(
   # why does the R world have such a dim view of loops
   # This is basically much more tractable than the equivalent in
   # map / lapply madness and worked immediately.
-  df_summary = df_summary %>% dplyr::mutate(.labelled_data = list(rep(tibble::tibble(),nrow(df_summary))))
+  df_summary = df_summary %>%
+    dplyr::mutate(
+      .labelled_data = list(rep(tibble::tibble(), nrow(df_summary)))
+    )
 
   for (i in 1:nrow(df_summary)) {
     df_row = df_summary %>% dplyr::filter(dplyr::row_number() == i)
 
     grps = df_row$.summary_data[[1]] %>% dplyr::groups()
     data = df_row %>% tidyr::unnest(.summary_data)
-    data = data %>% dplyr::group_by(!!!grps) %>%
+    data = data %>%
+      dplyr::group_by(!!!grps) %>%
       dplyr::rename(
         name = .name,
         label = .label,
@@ -285,8 +317,7 @@ as_huxtable.t1_summary = function(
 
     # for the remaining formatted columns in our definition we are after a long format:
     order3 = 1
-    for (newcol in setdiff(names(glue),"characteristic")) {
-
+    for (newcol in setdiff(names(glue), "characteristic")) {
       # newcol is potentially a glue spec. This is possibly going to be different
       # for different interventions (e.g. might reference `N` as total in each)
       # intervention, or even ({N}/{N_total}) for example. It should not reference
@@ -294,30 +325,43 @@ as_huxtable.t1_summary = function(
       # on a variable by variable basis (which is not what is generally wanted)
       # the intervention group itself will be a heading above this one.
       thisglue = glue[[newcol]]
-      thisglue = .adjust_fmt(thisglue, percent = df_row$.percent_dp[[1]], real = df_row$.real_dp[[1]])
+      thisglue = .adjust_fmt(
+        thisglue,
+        percent = df_row$.percent_dp[[1]],
+        real = df_row$.real_dp[[1]]
+      )
 
       # we want a long format tibble now with
       # .tbl_col_name and .tbl_col_value
-      tmp = named_data %>% dplyr::mutate(
-        .tbl_col_name = as.character(glue::glue_data(df_row, newcol)),
-        .tbl_col_value = glue::glue(thisglue),
-        .order3 = order3
-      )
+      tmp = named_data %>%
+        dplyr::mutate(
+          .tbl_col_name = as.character(glue::glue_data(df_row, newcol)),
+          .tbl_col_value = glue::glue(thisglue),
+          .order3 = order3
+        )
       outdata = dplyr::bind_rows(outdata, tmp)
 
-      order3 = order3+1
+      order3 = order3 + 1
     }
 
     # and we nest this back one item at a time. this col will now be a list of
     # tibbles grouped by intervention as before
     if (
       all(outdata$type == "categorical") &&
-      length(levels(outdata$level)) == 2 &&
-      any(show_binary_value %in% levels(outdata$level))
+        length(levels(outdata$level)) == 2 &&
+        any(show_binary_value %in% levels(outdata$level))
     ) {
       outdata = outdata %>% dplyr::filter(level %in% show_binary_value)
     }
-    df_summary$.labelled_data[[i]] = outdata %>% dplyr::select(!!!grps, characteristic, .tbl_col_name, .tbl_col_value, .order2, .order3)
+    df_summary$.labelled_data[[i]] = outdata %>%
+      dplyr::select(
+        !!!grps,
+        characteristic,
+        .tbl_col_name,
+        .tbl_col_value,
+        .order2,
+        .order3
+      )
   }
 
   tmp = suppressMessages(
@@ -328,9 +372,7 @@ as_huxtable.t1_summary = function(
       tidyr::unnest(.labelled_data) %>%
       dplyr::relocate(!!!grps) %>%
       dplyr::arrange(!!!grps, .order, .order2, .order3) %>%
-      dplyr::select(-.order,-.order2,-.order3)
+      dplyr::select(-.order, -.order2, -.order3)
   )
   return(structure(tmp, methods = get_footer_text(df_summary)))
-
 }
-
